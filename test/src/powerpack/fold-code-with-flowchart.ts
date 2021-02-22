@@ -1,8 +1,7 @@
-import { Test } from "hypermd_test/tester";
-import { cm, init, destory, querySelector } from "hypermd_test/addon/_base";
-import { sleep, assert } from "hypermd_test/utils";
-
 import "hypermd/powerpack/fold-code-with-flowchart";
+import { cm, init, querySelector } from "hypermd_test/addon/_base";
+import { Test } from "hypermd_test/tester";
+import { sleep } from "hypermd_test/utils";
 
 export const test = new Test("Powerpack: fold-code-with-flowchart");
 

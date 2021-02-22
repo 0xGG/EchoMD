@@ -8,24 +8,22 @@ import * as CodeMirror from "codemirror";
 import { Position } from "codemirror";
 import { Addon, suggestedEditorConfig } from "../core";
 import { cm_t } from "../core/type";
+import EmojiDefinitions from "./emoji/index";
 import {
-  registerFolder,
   breakMark,
   FolderFunc,
-  RequestRangeResult
+  registerFolder,
+  RequestRangeResult,
 } from "./fold";
-import EmojiDefinitions from "./emoji/index";
 
 /********************************************************************************** */
 
 export type EmojiRenderer = (text: string) => HTMLElement;
 export type EmojiChecker = (text: string) => boolean;
 
-export const defaultDict: Record<string, string> = {
-  /* initialized later */
-};
-export const defaultChecker: EmojiChecker = text => text in defaultDict;
-export const defaultRenderer: EmojiRenderer = text => {
+export const defaultDict: Record<string, string> = {}; /* initialized later */
+export const defaultChecker: EmojiChecker = (text) => text in defaultDict;
+export const defaultRenderer: EmojiRenderer = (text) => {
   var el = document.createElement("span");
   el.textContent = defaultDict[text];
   el.title = text;
@@ -91,7 +89,7 @@ export interface Options extends Addon.AddonOptions {
 export const defaultOption: Options = {
   myEmoji: {},
   emojiRenderer: defaultRenderer,
-  emojiChecker: defaultChecker
+  emojiChecker: defaultChecker,
 };
 
 export const suggestedOption: Partial<Options> = {};
@@ -116,23 +114,24 @@ declare global {
 
 suggestedEditorConfig.hmdFoldEmoji = suggestedOption;
 
-CodeMirror.defineOption("hmdFoldEmoji", defaultOption, function(
-  cm: cm_t,
-  newVal: OptionValueType
-) {
-  ///// convert newVal's type to `Partial<Options>`, if it is not.
+CodeMirror.defineOption(
+  "hmdFoldEmoji",
+  defaultOption,
+  function (cm: cm_t, newVal: OptionValueType) {
+    ///// convert newVal's type to `Partial<Options>`, if it is not.
 
-  if (!newVal) {
-    newVal = {};
+    if (!newVal) {
+      newVal = {};
+    }
+
+    ///// apply config and write new values into cm
+
+    var inst = getAddon(cm);
+    for (var k in defaultOption) {
+      inst[k] = k in newVal ? newVal[k] : defaultOption[k];
+    }
   }
-
-  ///// apply config and write new values into cm
-
-  var inst = getAddon(cm);
-  for (var k in defaultOption) {
-    inst[k] = k in newVal ? newVal[k] : defaultOption[k];
-  }
-});
+);
 
 //#endregion
 
@@ -162,14 +161,14 @@ export class FoldEmoji implements Addon.Addon, Options {
     if (el.className.indexOf("hmd-emoji") === -1) el.className += " hmd-emoji";
 
     var marker = cm.markText(from, to, {
-      replacedWith: el
+      replacedWith: el,
     });
 
     el.addEventListener("click", breakMark.bind(this, cm, marker, 1), false);
 
     if (el.tagName.toLowerCase() === "img") {
       el.addEventListener("load", () => marker.changed(), false);
-      el.addEventListener("dragstart", ev => ev.preventDefault(), false);
+      el.addEventListener("dragstart", (ev) => ev.preventDefault(), false);
     }
 
     return marker;
@@ -195,7 +194,7 @@ declare global {
 /********************************************************************************** */
 
 //#region initialize compact emoji dict
-(function(dest: typeof defaultDict) {
+(function (dest: typeof defaultDict) {
   for (const key in EmojiDefinitions) {
     dest[`:${key}:`] = EmojiDefinitions[key];
   }

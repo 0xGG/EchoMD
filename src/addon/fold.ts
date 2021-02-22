@@ -7,17 +7,17 @@
 //
 
 import * as CodeMirror from "codemirror";
+import { Position, Token } from "codemirror";
 import {
   Addon,
-  FlipFlop,
   debounce,
-  TokenSeeker,
+  normalVisualConfig,
+  orderedRange,
+  rangesIntersect,
   suggestedEditorConfig,
-  normalVisualConfig
+  TokenSeeker,
 } from "../core";
-import { Position, Token } from "codemirror";
 import { cm_t } from "../core/type";
-import { rangesIntersect, orderedRange } from "../core";
 
 const DEBUG = false;
 
@@ -120,7 +120,7 @@ export enum RequestRangeResult {
   // Otherwise the generated code looks ugly
   OK = "ok",
   CURSOR_INSIDE = "ci",
-  HAS_MARKERS = "hm"
+  HAS_MARKERS = "hm",
 }
 
 //#endregion
@@ -161,8 +161,8 @@ export function registerFolder(
 
 /** break a TextMarker, move cursor to where marker is */
 export function breakMark(cm: cm_t, marker: HmdTextMarker, chOffset?: number) {
-  cm.operation(function() {
-    var pos = marker.find().from;
+  cm.operation(function () {
+    var pos = (marker.find() as CodeMirror.MarkerRange).from;
     pos = { line: pos.line, ch: pos.ch + ~~chOffset };
     cm.setCursor(pos);
     cm.focus();
@@ -210,35 +210,36 @@ declare global {
 suggestedEditorConfig.hmdFold = suggestedOption;
 normalVisualConfig.hmdFold = false;
 
-CodeMirror.defineOption("hmdFold", defaultOption, function(
-  cm: cm_t,
-  newVal: OptionValueType
-) {
-  ///// convert newVal's type to `Record<string, boolean>`, if it is not.
+CodeMirror.defineOption(
+  "hmdFold",
+  defaultOption,
+  function (cm: cm_t, newVal: OptionValueType) {
+    ///// convert newVal's type to `Record<string, boolean>`, if it is not.
 
-  if (!newVal || typeof newVal === "boolean") {
-    newVal = newVal ? suggestedOption : defaultOption;
-  }
-
-  if ("customFolders" in newVal) {
-    if (window["VICKYMD_DEBUG"]) {
-      console.error(
-        "[HyperMD][Fold] `customFolders` is removed. To use custom folders, `registerFolder` first."
-      );
+    if (!newVal || typeof newVal === "boolean") {
+      newVal = newVal ? suggestedOption : defaultOption;
     }
-    delete newVal["customFolders"];
-  }
 
-  ///// apply config
-  var inst = getAddon(cm);
-  for (const type in folderRegistry) {
-    inst.setStatus(type, newVal[type]);
+    if ("customFolders" in newVal) {
+      if (window["VICKYMD_DEBUG"]) {
+        console.error(
+          "[HyperMD][Fold] `customFolders` is removed. To use custom folders, `registerFolder` first."
+        );
+      }
+      delete newVal["customFolders"];
+    }
+
+    ///// apply config
+    var inst = getAddon(cm);
+    for (const type in folderRegistry) {
+      inst.setStatus(type, newVal[type]);
+    }
+    // then, folding task will be queued by setStatus()
   }
-  // then, folding task will be queued by setStatus()
-});
+);
 
 // 0xGG
-export { parseAttributes, Attributes } from "./attributes/index";
+export { Attributes, parseAttributes } from "./attributes/index";
 
 //#endregion
 
@@ -295,7 +296,7 @@ export class Fold extends TokenSeeker implements Addon.Addon, FoldStream {
 
       this.startFold();
     });
-    cm.on("cursorActivity", cm => {
+    cm.on("cursorActivity", (cm) => {
       if (DEBUG) console.time("CA");
 
       let lineStuff: {
@@ -329,14 +330,14 @@ export class Fold extends TokenSeeker implements Addon.Addon, FoldStream {
           lineStuff[lineNo] = {
             lineNo,
             ch: [pos.ch],
-            markers
+            markers,
           };
         } else {
           lineStuff[lineNo].ch.push(pos.ch);
         }
       }
 
-      cm.listSelections().forEach(selection => {
+      cm.listSelections().forEach((selection) => {
         addPosition(selection.anchor);
         addPosition(selection.head);
       });
@@ -436,7 +437,7 @@ export class Fold extends TokenSeeker implements Addon.Addon, FoldStream {
     }
 
     cm.operation(() =>
-      cm.eachLine(fromLine, toLine, line => {
+      cm.eachLine(fromLine, toLine, (line) => {
         var lineNo = line.lineNo();
         if (lineNo < this.lineNo) return;
         // skip current line...
@@ -487,7 +488,7 @@ export class Fold extends TokenSeeker implements Addon.Addon, FoldStream {
             // this token not folded. check next
             this.i_token++;
           } else {
-            var { from, to } = marker.find();
+            var { from, to } = marker.find() as CodeMirror.MarkerRange;
             (this.folded[type] || (this.folded[type] = [])).push(marker);
             marker._hmd_fold_type = type;
             marker._hmd_crange = this._lastCRange;

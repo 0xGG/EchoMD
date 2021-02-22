@@ -12,22 +12,21 @@
 //
 
 import * as _emojione_module from "emojione";
+import "emojione/extras/css/emojione.min.css";
 import {
   defaultOption,
   EmojiChecker,
-  EmojiRenderer
+  EmojiRenderer,
 } from "../addon/fold-emoji";
-
-import "emojione/extras/css/emojione.min.css";
 
 /** emojione doesn't have AMD declaration. load it from browser if needed */
 var emojione: typeof _emojione_module =
-  _emojione_module || this["emojione"] || window["emojione"];
+  _emojione_module || (this as any)["emojione"] || window["emojione"];
 
-export const emojioneChecker: EmojiChecker = text =>
+export const emojioneChecker: EmojiChecker = (text) =>
   emojione.shortnameToUnicode(text) != text;
 
-export const emojioneRenderer: EmojiRenderer = text => {
+export const emojioneRenderer: EmojiRenderer = (text) => {
   var html = emojione.shortnameToImage(text);
   if (!/^<img /i.test(html)) return null;
 

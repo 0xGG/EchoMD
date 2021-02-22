@@ -28,12 +28,12 @@
 
 import * as CodeMirror from "codemirror";
 import * as flowchart from "flowchart.js";
-import {
-  registerRenderer,
-  CodeRenderer,
-  getAddon as getFoldCode
-} from "../addon/fold-code";
 import { getAddon as getFold } from "../addon/fold";
+import {
+  CodeRenderer,
+  getAddon as getFoldCode,
+  registerRenderer,
+} from "../addon/fold-code";
 
 export const FlowchartRenderer: CodeRenderer = (code, info) => {
   var fc = flowchart.parse(code);
@@ -66,7 +66,7 @@ export const FlowchartRenderer: CodeRenderer = (code, info) => {
 
   return {
     element: el,
-    asyncRenderer: null
+    asyncRenderer: null,
   };
 };
 
@@ -80,7 +80,7 @@ if (typeof flowchart === "object") {
     name: "flowchart",
     pattern: /^flow(?:charts?)?$/i,
     renderer: FlowchartRenderer,
-    suggested: true
+    suggested: true,
   });
 } else {
   if (window["VICKYMD_DEBUG"]) {

@@ -1,5 +1,5 @@
-import { Attributes } from "../addon/attributes/index";
 import { Editor } from "codemirror";
+import { Attributes } from "../addon/attributes/index";
 
 // VickyMD, copyright (c) by 0xGG Team
 // Distributed under an AGPL3

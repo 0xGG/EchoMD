@@ -2,34 +2,31 @@ import MarkdownIt from "markdown-it";
 // import Prism from "prismjs";
 import MarkdownItEmoji from "markdown-it-emoji";
 import MarkdownItFootnote from "markdown-it-footnote";
-import MarkdownItTaskLists from "markdown-it-task-lists";
-import MarkdownItMark from "markdown-it-mark";
 import MarkdownItIns from "markdown-it-ins";
+import MarkdownItMark from "markdown-it-mark";
 import MarkdownItSub from "markdown-it-sub";
 import MarkdownItSup from "markdown-it-sup";
-
-declare var YAML: typeof import("yamljs");
+import MarkdownItTaskLists from "markdown-it-task-lists";
+import EmojiDefinitions from "../addon/emoji/index";
+import { EchartsRenderer } from "../powerpack/fold-code-with-echarts";
+import { MermaidRenderer } from "../powerpack/fold-code-with-mermaid";
+// Powerpacks
+import { PlantUMLRenderer } from "../powerpack/fold-code-with-plantuml";
+import { VegaRenderer } from "../powerpack/fold-code-with-vega";
+import { VegaLiteRenderer } from "../powerpack/fold-code-with-vega-lite";
+import { WaveDromRenderer } from "../powerpack/fold-code-with-wavedrom";
+import { getWidgetCreator } from "../widget/index";
+import FenceEnhancer from "./features/fence";
 // import * as YAML from "yamljs";
-
 import MathEnhancer from "./features/math";
 import TagEnhancer from "./features/tag";
 import WidgetEnhancer from "./features/widget";
-import FenceEnhancer from "./features/fence";
 import WikiLinkEnhancer from "./features/wikilink";
-
-// Powerpacks
-import { PlantUMLRenderer } from "../powerpack/fold-code-with-plantuml";
-
-import { transformMarkdown, HeadingData } from "./transform";
 import HeadingIdGenerator from "./heading-id-generator";
 import { parseSlides } from "./slide";
-import { EchartsRenderer } from "../powerpack/fold-code-with-echarts";
-import { MermaidRenderer } from "../powerpack/fold-code-with-mermaid";
-import { WaveDromRenderer } from "../powerpack/fold-code-with-wavedrom";
-import { getWidgetCreator } from "../widget/index";
-import { VegaRenderer } from "../powerpack/fold-code-with-vega";
-import { VegaLiteRenderer } from "../powerpack/fold-code-with-vega-lite";
-import EmojiDefinitions from "../addon/emoji/index";
+import { HeadingData, transformMarkdown } from "./transform";
+
+declare var YAML: typeof import("yamljs");
 
 declare var html2pdf: typeof import("html2pdf.js").default;
 
@@ -173,7 +170,7 @@ function renderPreview(
   forRevealJSPrint: boolean = false,
   requires: Requires = {}
 ) {
-  return new Promise((resolve, reject) => {
+  return new Promise<void>((resolve, reject) => {
     const { html, headings, slideConfigs, yamlConfig } = renderMarkdown(
       markdown
     );
@@ -204,7 +201,7 @@ function renderPreview(
         wavedromInitScript += `<script>
   Reveal.addEventListener("ready", ()=> {
     WaveDrom.ProcessAll()
-  })      
+  })
   </script>`;
       }
 
@@ -266,7 +263,7 @@ function renderPreview(
     <head>
       <meta charset="utf-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1" />
-      
+
       <!-- reveal.js styles -->
       <link rel="stylesheet" href=${
         requires.RevealCSS ||
@@ -276,7 +273,7 @@ function renderPreview(
         (requires.RevealThemeCSSFunc &&
           requires.RevealThemeCSSFunc(revealJSTheme)) ||
         `https://cdn.jsdelivr.net/npm/reveal.js@3.9.2/css/theme/${revealJSTheme}`
-      }>    
+      }>
       ${
         forRevealJSPrint
           ? `<link rel="stylesheet" href=${
@@ -285,23 +282,23 @@ function renderPreview(
             }>`
           : ""
       }
-  
+
       <!-- katex -->
       <link rel="stylesheet" href=${
         requires.KaTeXCSS ||
-        "https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css"
+        "https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css"
       }>
-  
+
       <!-- prism github theme -->
       <link href=${
         (requires.PrismCSSFunc &&
           requires.PrismCSSFunc(revealJSCodeBlockTheme)) ||
         `https://cdn.jsdelivr.net/npm/@shd101wyy/mume@0.4.7/styles/prism_theme/${revealJSCodeBlockTheme}`
       } rel="stylesheet">
-    
+
       <!-- mermaid -->
       ${mermaidScript}
-  
+
       <!-- wavedrom -->
       ${wavedromScript}
     </head>
@@ -322,19 +319,19 @@ function renderPreview(
       requires.RevealJS ||
       "https://cdn.jsdelivr.net/npm/reveal.js@3.9.2/js/reveal.min.js"
     }></script>
-  
+
     <!-- prism.js -->
     <script src=${
       requires.PrismJS ||
       "https://cdn.jsdelivr.net/npm/prismjs@1.17.1/prism.min.js"
     }></script>
-  
+
     <!-- mermaid -->
     ${mermaidInitScript}
-  
+
     <!-- wavedrom -->
     ${wavedromInitScript}
-  
+
     <!-- initialize reveal.js -->
     <script>
   Reveal.initialize(${JSON.stringify({
@@ -486,7 +483,7 @@ function printPDF(
   printOption = {},
   bannerElement?: HTMLElement
 ) {
-  return new Promise((resolve, reject) => {
+  return new Promise<void>((resolve, reject) => {
     if (!window["html2pdf"]) {
       throw new Error("html2pdf is not imported. Failed to print pdf");
     }
@@ -540,7 +537,7 @@ function printPreview(
   extraMediaPrintCSS: string = "",
   timeout = 2000
 ) {
-  return new Promise(async (resolve, reject) => {
+  return new Promise<void>(async (resolve, reject) => {
     if (!bannerElement) {
       bannerElement = document.createElement("div");
       bannerElement.style.position = "fixed";

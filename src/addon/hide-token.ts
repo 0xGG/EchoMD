@@ -9,16 +9,18 @@
 import * as CodeMirror from "codemirror";
 import {
   Addon,
-  FlipFlop,
   cm_internal,
   debounce,
-  suggestedEditorConfig,
+  FlipFlop,
+  getLineSpanExtractor,
   normalVisualConfig,
+  OrderedRange,
+  orderedRange,
+  rangesIntersect,
+  Span,
+  suggestedEditorConfig,
 } from "../core";
-
 import { cm_t } from "../core/type";
-import { OrderedRange, orderedRange, rangesIntersect } from "../core";
-import { getLineSpanExtractor, Span } from "../core";
 
 const DEBUG = false;
 
@@ -89,27 +91,28 @@ declare global {
 suggestedEditorConfig.hmdHideToken = suggestedOption;
 normalVisualConfig.hmdHideToken = false;
 
-CodeMirror.defineOption("hmdHideToken", defaultOption, function (
-  cm: cm_t,
-  newVal: OptionValueType
-) {
-  ///// convert newVal's type to `Partial<Options>`, if it is not.
+CodeMirror.defineOption(
+  "hmdHideToken",
+  defaultOption,
+  function (cm: cm_t, newVal: OptionValueType) {
+    ///// convert newVal's type to `Partial<Options>`, if it is not.
 
-  if (!newVal || typeof newVal === "boolean") {
-    newVal = { enabled: !!newVal };
-  } else if (typeof newVal === "string") {
-    newVal = { enabled: true, tokenTypes: newVal.split("|") };
-  } else if (newVal instanceof Array) {
-    newVal = { enabled: true, tokenTypes: newVal };
+    if (!newVal || typeof newVal === "boolean") {
+      newVal = { enabled: !!newVal };
+    } else if (typeof newVal === "string") {
+      newVal = { enabled: true, tokenTypes: newVal.split("|") };
+    } else if (newVal instanceof Array) {
+      newVal = { enabled: true, tokenTypes: newVal };
+    }
+
+    ///// apply config and write new values into cm
+
+    var inst = getAddon(cm);
+    for (var k in defaultOption) {
+      inst[k] = k in newVal ? newVal[k] : defaultOption[k];
+    }
   }
-
-  ///// apply config and write new values into cm
-
-  var inst = getAddon(cm);
-  for (var k in defaultOption) {
-    inst[k] = k in newVal ? newVal[k] : defaultOption[k];
-  }
-});
+);
 
 //#endregion
 
@@ -153,7 +156,7 @@ export class HideToken implements Addon.Addon, Options {
     if (DEBUG) console.log("renderLine return " + changed);
   };
 
-  cursorActivityHandler = (doc: CodeMirror.Doc) => {
+  cursorActivityHandler = (/*doc: CodeMirror.Doc*/) => {
     this.update();
   };
 
