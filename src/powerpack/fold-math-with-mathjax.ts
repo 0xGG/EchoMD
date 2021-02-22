@@ -29,7 +29,7 @@ import "mathjax";
 import {
   defaultOption,
   MathRenderer,
-  MathRenderMode
+  MathRenderMode,
 } from "../addon/fold-math";
 
 export class MathJaxRenderer implements MathRenderer {
@@ -107,14 +107,14 @@ export class MathJaxRenderer implements MathRenderer {
 
 if (typeof MathJax !== "object") {
   // MathJax not exists. Do nothing
-  if (window["VICKYMD_DEBUG"]) {
+  if (window["ECHOMD_DEBUG"]) {
     console.error(
       "[HyperMD] PowerPack fold-math-with-mathjax loaded, but MathJax not found."
     );
   }
 } else if (0 == MathJax.Hub.config.jax.length) {
   // IF NOT FOUND, throw a warning
-  if (window["VICKYMD_DEBUG"]) {
+  if (window["ECHOMD_DEBUG"]) {
     console.error(
       "[HyperMD] Looks like MathJax is not configured.\nPlease do this BEFORE loading MathJax.\nSee http://docs.mathjax.org/en/latest/configuration.html"
     );

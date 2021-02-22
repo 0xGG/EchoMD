@@ -4,15 +4,15 @@
 // DESCRIPTION: Fold Image Markers `![](xxx)`
 //
 
+import * as CodeMirror from "codemirror";
+import { Position } from "codemirror";
 import {
+  breakMark,
   FolderFunc,
   registerFolder,
   RequestRangeResult,
-  breakMark,
 } from "./fold";
-import { Position } from "codemirror";
 import { splitLink } from "./read-link";
-import * as CodeMirror from "codemirror";
 
 const DEBUG = false;
 
@@ -126,7 +126,7 @@ export const ImageFolder: FolderFunc = function (stream, token) {
       });
       return marker;
     } else {
-      if (DEBUG && window["VICKYMD_DEBUG"]) {
+      if (DEBUG && window["ECHOMD_DEBUG"]) {
         console.log("[image]FAILED TO REQUEST RANGE: ", rngReq);
       }
     }

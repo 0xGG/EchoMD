@@ -14,9 +14,9 @@ import {
 } from "../core";
 import { cm_t } from "../core/type";
 import {
-  registerFolder,
   breakMark,
   FolderFunc,
+  registerFolder,
   RequestRangeResult,
 } from "./fold";
 import "./read-link";
@@ -238,38 +238,39 @@ declare global {
 
 suggestedEditorConfig.hmdFoldHTML = suggestedOption;
 
-CodeMirror.defineOption("hmdFoldHTML", defaultOption, function (
-  cm: cm_t,
-  newVal: OptionValueType
-) {
-  ///// convert newVal's type to `Partial<Options>`, if it is not.
+CodeMirror.defineOption(
+  "hmdFoldHTML",
+  defaultOption,
+  function (cm: cm_t, newVal: OptionValueType) {
+    ///// convert newVal's type to `Partial<Options>`, if it is not.
 
-  if (!newVal) {
-    newVal = {};
-  } else if (typeof newVal == "function") {
-    newVal = { checker: newVal };
-  } else if (typeof newVal != "object") {
-    console.warn("[HyperMD][FoldHTML] incorrect option value type");
-    newVal = {};
-  }
-
-  ///// apply config and write new values into cm
-
-  var inst = getAddon(cm);
-  for (var k in defaultOption) {
-    inst[k] = k in newVal ? newVal[k] : defaultOption[k];
-  }
-
-  ///// Type Check
-  if (inst.isolatedTagName && !(inst.isolatedTagName instanceof RegExp)) {
-    if (window["VICKYMD_DEBUG"]) {
-      console.error(
-        "[HyperMD][FoldHTML] option isolatedTagName only accepts RegExp"
-      );
+    if (!newVal) {
+      newVal = {};
+    } else if (typeof newVal == "function") {
+      newVal = { checker: newVal };
+    } else if (typeof newVal != "object") {
+      console.warn("[HyperMD][FoldHTML] incorrect option value type");
+      newVal = {};
     }
-    inst.isolatedTagName = defaultOption.isolatedTagName;
+
+    ///// apply config and write new values into cm
+
+    var inst = getAddon(cm);
+    for (var k in defaultOption) {
+      inst[k] = k in newVal ? newVal[k] : defaultOption[k];
+    }
+
+    ///// Type Check
+    if (inst.isolatedTagName && !(inst.isolatedTagName instanceof RegExp)) {
+      if (window["ECHOMD_DEBUG"]) {
+        console.error(
+          "[HyperMD][FoldHTML] option isolatedTagName only accepts RegExp"
+        );
+      }
+      inst.isolatedTagName = defaultOption.isolatedTagName;
+    }
   }
-});
+);
 
 //#endregion
 

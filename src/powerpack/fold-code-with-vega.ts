@@ -7,13 +7,13 @@
 //      <script src="https://cdn.jsdelivr.net/npm/vega@5/build/vega.min.js"></script>
 
 import * as CodeMirror from "codemirror";
-import {
-  registerRenderer,
-  CodeRenderer,
-  getAddon as getFoldCode
-} from "../addon/fold-code";
-import { getAddon as getFold } from "../addon/fold";
 import * as YAML from "yamljs";
+import { getAddon as getFold } from "../addon/fold";
+import {
+  CodeRenderer,
+  getAddon as getFoldCode,
+  registerRenderer,
+} from "../addon/fold-code";
 declare var vega: typeof import("vega");
 
 export const VegaRenderer: CodeRenderer = (code, info) => {
@@ -31,7 +31,7 @@ export const VegaRenderer: CodeRenderer = (code, info) => {
     asyncRenderer = () => {
       const view = new vega.View(vega.parse(spec), {
         renderer: "canvas",
-        container: "#" + id
+        container: "#" + id,
       });
       view.runAsync().then(() => {
         if (info.changed) {
@@ -45,7 +45,7 @@ export const VegaRenderer: CodeRenderer = (code, info) => {
 
   return {
     element: el,
-    asyncRenderer: asyncRenderer
+    asyncRenderer: asyncRenderer,
   };
 };
 
@@ -59,15 +59,15 @@ if (typeof vega !== "undefined" && vega.View) {
     name: "vega",
     pattern: /^vega$/i,
     renderer: VegaRenderer,
-    suggested: true
+    suggested: true,
   });
-  if (window["VICKYMD_DEBUG"]) {
+  if (window["ECHOMD_DEBUG"]) {
     console.log("[HyperMD] PowerPack fold-code-with-vega loaded.");
   }
 } else {
-  if (window["VICKYMD_DEBUG"]) {
+  if (window["ECHOMD_DEBUG"]) {
     console.log(`[HyperMD] PowerPack fold-code-with-vega failed to load.
-Please include  
+Please include
 
     <script src="https://cdn.jsdelivr.net/npm/vega@5/build/vega.min.js"></script>
 

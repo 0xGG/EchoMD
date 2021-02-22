@@ -174,7 +174,7 @@ function renderPreview(
     const { html, headings, slideConfigs, yamlConfig } = renderMarkdown(
       markdown
     );
-    previewElement.setAttribute("data-vickymd-preview", "true");
+    previewElement.setAttribute("data-echomd-preview", "true");
     if (!slideConfigs.length) {
       previewElement.innerHTML = html;
       performAfterWorks(previewElement);
@@ -360,7 +360,7 @@ function renderPreview(
 
 function renderWidgets(previewElement: HTMLElement) {
   // render widgets
-  const widgets = previewElement.getElementsByClassName("vickymd-widget");
+  const widgets = previewElement.getElementsByClassName("echomd-widget");
   for (let i = 0; i < widgets.length; i++) {
     const widgetSpan = widgets[i];
     const widgetName = widgetSpan.getAttribute("data-widget-name");
@@ -384,7 +384,7 @@ function renderWidgets(previewElement: HTMLElement) {
       isPreview: true,
     });
     if (widget) {
-      widget.classList.add("vickymd-widget");
+      widget.classList.add("echomd-widget");
       widget.setAttribute("data-widget-name", widgetName);
       widget.setAttribute("data-widget-attributes", widgetAttributesStr);
       widgetSpan.replaceWith(widget);

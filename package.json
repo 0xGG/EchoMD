@@ -1,6 +1,6 @@
 {
-  "name": "vickymd",
-  "version": "0.2.5",
+  "name": "echomd",
+  "version": "1.0.0",
   "description": "An experimental WYSIWYG markdown editor built on top of HyperMD with extended Widgets support",
   "main": "./everything.js",
   "types": "./everything.d.ts",
@@ -23,7 +23,7 @@
     "codemirror",
     "wysiwyg"
   ],
-  "homepage": "https://github.com/0xGG/VickyMD",
+  "homepage": "https://github.com/0xGG/EchoMD",
   "author": "0xGG Team",
   "license": "AGPL-3.0-or-later",
   "devDependencies": {

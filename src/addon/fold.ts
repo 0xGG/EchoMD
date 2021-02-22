@@ -221,7 +221,7 @@ CodeMirror.defineOption(
     }
 
     if ("customFolders" in newVal) {
-      if (window["VICKYMD_DEBUG"]) {
+      if (window["ECHOMD_DEBUG"]) {
         console.error(
           "[HyperMD][Fold] `customFolders` is removed. To use custom folders, `registerFolder` first."
         );
@@ -432,7 +432,7 @@ export class Fold extends TokenSeeker implements Addon.Addon, FoldStream {
     this._quickFoldHint = [];
     this.setPos(fromLine, 0, true);
 
-    if (DEBUG && window["VICKYMD_DEBUG"]) {
+    if (DEBUG && window["ECHOMD_DEBUG"]) {
       console.log("start fold! ", fromLine, toLine);
     }
 
@@ -500,7 +500,7 @@ export class Fold extends TokenSeeker implements Addon.Addon, FoldStream {
               this._quickFoldHint.push(from.line);
             });
 
-            if (DEBUG && window["VICKYMD_DEBUG"]) {
+            if (DEBUG && window["ECHOMD_DEBUG"]) {
               console.log("[FOLD] New marker ", type, from, to, marker);
             }
 

@@ -55,7 +55,7 @@ if (typeof twemoji !== "undefined") {
   defaultOption.emojiChecker = twemojiChecker;
   defaultOption.emojiRenderer = twemojiRenderer;
 } else {
-  if (window["VICKYMD_DEBUG"]) {
+  if (window["ECHOMD_DEBUG"]) {
     console.error(
       "[HyperMD] PowerPack fold-emoji-with-twemoji loaded, but twemoji not found."
     );

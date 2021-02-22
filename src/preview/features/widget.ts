@@ -33,7 +33,7 @@ export default (md: MarkdownIt) => {
       widgetName = content.trim().replace(/^@/, "");
     }
     if (widgetName) {
-      return `<span class="vickymd-widget" data-widget-name='${widgetName}' data-widget-attributes='${JSON.stringify(
+      return `<span class="echomd-widget" data-widget-name='${widgetName}' data-widget-attributes='${JSON.stringify(
         widgetAttributes
       )}'></span>`;
     }

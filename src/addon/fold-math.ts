@@ -8,14 +8,14 @@
 //
 
 import * as CodeMirror from "codemirror";
-import { Addon, FlipFlop, tryToRun, suggestedEditorConfig } from "../core";
-import { TextMarker, Position, Token } from "codemirror";
+import { Position, TextMarker } from "codemirror";
+import { Addon, FlipFlop, suggestedEditorConfig, tryToRun } from "../core";
 import { cm_t } from "../core/type";
 import {
-  registerFolder,
   breakMark,
   FolderFunc,
-  RequestRangeResult
+  registerFolder,
+  RequestRangeResult,
 } from "./fold";
 
 const DEBUG = false;
@@ -59,7 +59,7 @@ export const MathFolder: FolderFunc = (stream, token) => {
   // CodeMirror GFM mode split "$$" into two tokens, so do a extra check.
 
   if (tokenLength == 2 && token.string.length == 1) {
-    if (DEBUG && window["VICKYMD_DEBUG"]) {
+    if (DEBUG && window["ECHOMD_DEBUG"]) {
       console.log("[FoldMath] $$ is splitted into 2 tokens");
     }
     let nextToken = stream.lineTokens[stream.i_token + 1];
@@ -92,7 +92,7 @@ export const MathFolder: FolderFunc = (stream, token) => {
   var expr_from: Position = { line: from.line, ch: from.ch + tokenLength };
   var expr_to: Position = {
     line: to.line,
-    ch: to.ch - (noEndingToken ? 0 : tokenLength)
+    ch: to.ch - (noEndingToken ? 0 : tokenLength),
   };
   var expr: string = cm.getRange(expr_from, expr_to).trim();
 
@@ -137,12 +137,12 @@ export function insertMathMark(
 
   span.appendChild(mathPlaceholder);
 
-  if (DEBUG && window["VICKYMD_DEBUG"]) {
+  if (DEBUG && window["ECHOMD_DEBUG"]) {
     console.log("insert", p1, p2, expression);
   }
 
   var marker: TextMarker = cm.markText(p1, p2, {
-    replacedWith: span
+    replacedWith: span,
   });
 
   span.addEventListener(
@@ -156,21 +156,21 @@ export function insertMathMark(
     span,
     isDisplayMode ? "display" : ""
   );
-  mathRenderer.onChanged = function() {
+  mathRenderer.onChanged = function () {
     if (mathPlaceholder) {
       span.removeChild(mathPlaceholder);
       mathPlaceholder = null;
     }
     marker.changed();
   };
-  marker.on("clear", function() {
+  marker.on("clear", function () {
     mathRenderer.clear();
   });
   marker["mathRenderer"] = mathRenderer;
 
   tryToRun(
     () => {
-      if (DEBUG && window["VICKYMD_DEBUG"]) {
+      if (DEBUG && window["ECHOMD_DEBUG"]) {
         console.log("[MATH] Trying to render ", expression);
       }
       if (!mathRenderer.isReady()) return false;
@@ -181,7 +181,7 @@ export function insertMathMark(
     () => {
       // if failed 5 times...
       marker.clear();
-      if (DEBUG && window["VICKYMD_DEBUG"]) {
+      if (DEBUG && window["ECHOMD_DEBUG"]) {
         console.log(
           "[MATH] engine always not ready. faild to render ",
           expression,
@@ -263,7 +263,7 @@ export interface Options extends Addon.AddonOptions {
 export const defaultOption: Options = {
   renderer: DumbRenderer,
   onPreview: null,
-  onPreviewEnd: null
+  onPreviewEnd: null,
 };
 
 export const suggestedOption: Partial<Options> = {};
@@ -289,25 +289,26 @@ declare global {
 
 suggestedEditorConfig.hmdFoldMath = suggestedOption;
 
-CodeMirror.defineOption("hmdFoldMath", defaultOption, function(
-  cm: cm_t,
-  newVal: OptionValueType
-) {
-  ///// convert newVal's type to `Partial<Options>`, if it is not.
+CodeMirror.defineOption(
+  "hmdFoldMath",
+  defaultOption,
+  function (cm: cm_t, newVal: OptionValueType) {
+    ///// convert newVal's type to `Partial<Options>`, if it is not.
 
-  if (!newVal) {
-    newVal = {};
-  } else if (typeof newVal === "function") {
-    newVal = { renderer: newVal };
+    if (!newVal) {
+      newVal = {};
+    } else if (typeof newVal === "function") {
+      newVal = { renderer: newVal };
+    }
+
+    ///// apply config and write new values into cm
+
+    var inst = getAddon(cm);
+    for (var k in defaultOption) {
+      inst[k] = k in newVal ? newVal[k] : defaultOption[k];
+    }
   }
-
-  ///// apply config and write new values into cm
-
-  var inst = getAddon(cm);
-  for (var k in defaultOption) {
-    inst[k] = k in newVal ? newVal[k] : defaultOption[k];
-  }
-});
+);
 
 //#endregion
 
@@ -324,7 +325,7 @@ export class FoldMath implements Addon.Addon, Options {
 
   constructor(public cm: cm_t) {
     new FlipFlop<string>(
-      /** CHANGED */ expr => {
+      /** CHANGED */ (expr) => {
         this.onPreview && this.onPreview(expr);
       },
       /** HIDE    */ () => {

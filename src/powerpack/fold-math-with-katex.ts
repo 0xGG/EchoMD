@@ -9,13 +9,12 @@
 //
 
 import * as katex from "katex";
+import "katex/dist/katex.min.css";
 import {
   defaultOption,
   MathRenderer,
   MathRenderMode,
 } from "../addon/fold-math";
-
-import "katex/dist/katex.min.css";
 
 export class KatexRenderer implements MathRenderer {
   private isDisplay: boolean;
@@ -85,7 +84,7 @@ export class KatexRenderer implements MathRenderer {
 if (typeof katex != "undefined") {
   defaultOption.renderer = KatexRenderer;
 } else {
-  if (window["VICKYMD_DEBUG"]) {
+  if (window["ECHOMD_DEBUG"]) {
     console.error(
       "[HyperMD] PowerPack fold-math-with-katex loaded, but katex not found."
     );

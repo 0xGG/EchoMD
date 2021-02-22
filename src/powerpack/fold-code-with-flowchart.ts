@@ -83,7 +83,7 @@ if (typeof flowchart === "object") {
     suggested: true,
   });
 } else {
-  if (window["VICKYMD_DEBUG"]) {
+  if (window["ECHOMD_DEBUG"]) {
     console.error(
       "[HyperMD] PowerPack fold-code-with-flowchart loaded, but flowchart not found."
     );

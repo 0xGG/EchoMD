@@ -8,13 +8,13 @@
 //    <script src="https://cdn.jsdelivr.net/npm/vega-embed@6/build/vega-embed.min.js"></script>
 
 import * as CodeMirror from "codemirror";
-import {
-  registerRenderer,
-  CodeRenderer,
-  getAddon as getFoldCode
-} from "../addon/fold-code";
-import { getAddon as getFold } from "../addon/fold";
 import * as YAML from "yamljs";
+import { getAddon as getFold } from "../addon/fold";
+import {
+  CodeRenderer,
+  getAddon as getFoldCode,
+  registerRenderer,
+} from "../addon/fold-code";
 declare var vegaEmbed: typeof import("vega-embed").default;
 
 export const VegaLiteRenderer: CodeRenderer = (code, info) => {
@@ -36,7 +36,7 @@ export const VegaLiteRenderer: CodeRenderer = (code, info) => {
 
   return {
     element: el,
-    asyncRenderer: null
+    asyncRenderer: null,
   };
 };
 
@@ -50,15 +50,15 @@ if (typeof vegaEmbed !== "undefined") {
     name: "vega-lite",
     pattern: /^vega\-lite$/i,
     renderer: VegaLiteRenderer,
-    suggested: true
+    suggested: true,
   });
-  if (window["VICKYMD_DEBUG"]) {
+  if (window["ECHOMD_DEBUG"]) {
     console.log("[HyperMD] PowerPack fold-code-with-vega-lite loaded.");
   }
 } else {
-  if (window["VICKYMD_DEBUG"]) {
+  if (window["ECHOMD_DEBUG"]) {
     console.log(`[HyperMD] PowerPack fold-code-with-vega-lite failed to load.
-Please include  
+Please include
 
     <script src="https://cdn.jsdelivr.net/npm/vega-lite@4/build/vega-lite.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vega-embed@6/build/vega-embed.min.js"></script>
