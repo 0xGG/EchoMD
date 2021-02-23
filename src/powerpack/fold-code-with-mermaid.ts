@@ -20,12 +20,12 @@
 // before RequireJS or `dist/your_app.js`
 
 import * as CodeMirror from "codemirror";
+import { getAddon as getFold } from "../addon/fold";
 import {
-  registerRenderer,
   CodeRenderer,
   getAddon as getFoldCode,
+  registerRenderer,
 } from "../addon/fold-code";
-import { getAddon as getFold } from "../addon/fold";
 
 /** global mermaid */
 declare var mermaid: typeof import("mermaid").default;
@@ -75,7 +75,7 @@ if (typeof mermaid === "object") {
     suggested: true,
   });
 } else {
-  if (window["VICKYMD_DEBUG"]) {
+  if (window["ECHOMD_DEBUG"]) {
     console.error(
       "[HyperMD] PowerPack fold-code-with-mermaid loaded, but mermaid not found."
     );

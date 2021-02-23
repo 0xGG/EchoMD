@@ -7,7 +7,7 @@ import { basePath } from "./base";
 
 Promise.all([
   execMaker("options-for-addons.md", "./make_options_for_addons"),
-  execMaker("powerpacks.md", "./make_powerpacks")
+  execMaker("powerpacks.md", "./make_powerpacks"),
 ]);
 
 //-------------------------------------------------------------
@@ -36,8 +36,8 @@ async function execMaker(filename: string, makerModule: string) {
     process.exit(1);
   }
 
-  await new Promise((res, rej) => {
-    fs.writeFile(fn, text, err => {
+  await new Promise<void>((res, rej) => {
+    fs.writeFile(fn, text, (err) => {
       if (err) {
         console.error("[HyperMD] Failed to write doc: " + filename);
         console.error(err);

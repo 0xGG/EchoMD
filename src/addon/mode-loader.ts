@@ -5,9 +5,9 @@
 //
 
 import * as CodeMirror from "codemirror";
+import "codemirror/mode/meta";
 import { Addon, FlipFlop, suggestedEditorConfig } from "../core";
 import { cm_t } from "../core/type";
-import "codemirror/mode/meta";
 
 declare global {
   const requirejs: (modules: string[], factory: Function) => any;
@@ -36,14 +36,14 @@ export interface Options extends Addon.AddonOptions {
 }
 
 export const defaultOption: Options = {
-  source: null
+  source: null,
 };
 
 export const suggestedOption: Partial<Options> = {
   source:
     typeof requirejs === "function"
       ? "~codemirror/"
-      : "https://cdn.jsdelivr.net/npm/codemirror/"
+      : "https://cdn.jsdelivr.net/npm/codemirror/",
 };
 
 export type OptionValueType = Partial<Options> | boolean | string | LoaderFunc;
@@ -67,25 +67,26 @@ declare global {
 
 suggestedEditorConfig.hmdModeLoader = suggestedOption;
 
-CodeMirror.defineOption("hmdModeLoader", defaultOption, function(
-  cm: cm_t,
-  newVal: OptionValueType
-) {
-  ///// convert newVal's type to `Partial<Options>`, if it is not.
+CodeMirror.defineOption(
+  "hmdModeLoader",
+  defaultOption,
+  function (cm: cm_t, newVal: OptionValueType) {
+    ///// convert newVal's type to `Partial<Options>`, if it is not.
 
-  if (!newVal || typeof newVal === "boolean") {
-    newVal = { source: (newVal && suggestedOption.source) || null };
-  } else if (typeof newVal === "string" || typeof newVal === "function") {
-    newVal = { source: newVal };
+    if (!newVal || typeof newVal === "boolean") {
+      newVal = { source: (newVal && suggestedOption.source) || null };
+    } else if (typeof newVal === "string" || typeof newVal === "function") {
+      newVal = { source: newVal };
+    }
+
+    ///// apply config and write new values into cm
+
+    var inst = getAddon(cm);
+    for (var k in defaultOption) {
+      inst[k] = k in newVal ? newVal[k] : defaultOption[k];
+    }
   }
-
-  ///// apply config and write new values into cm
-
-  var inst = getAddon(cm);
-  for (var k in defaultOption) {
-    inst[k] = k in newVal ? newVal[k] : defaultOption[k];
-  }
-});
+);
 
 //#endregion
 
@@ -138,8 +139,8 @@ export class ModeLoader implements Addon.Addon, Options {
 
     // start load a mode
     if (line >= 0) linesWaiting[mode] = [line];
-    var successCb = function() {
-      if (window["VICKYMD_DEBUG"]) {
+    var successCb = function () {
+      if (window["ECHOMD_DEBUG"]) {
         console.log("[HyperMD] mode-loader loaded " + mode);
       }
       const lines = linesWaiting[mode];
@@ -150,8 +151,8 @@ export class ModeLoader implements Addon.Addon, Options {
       });
       delete linesWaiting[mode];
     };
-    var errorCb = function() {
-      if (window["VICKYMD_DEBUG"]) {
+    var errorCb = function () {
+      if (window["ECHOMD_DEBUG"]) {
         console.warn(
           "[HyperMD] mode-loader failed to load mode " + mode + " from ",
           url
@@ -161,10 +162,10 @@ export class ModeLoader implements Addon.Addon, Options {
         // no more chance
         return;
       }
-      if (window["VICKYMD_DEBUG"]) {
+      if (window["ECHOMD_DEBUG"]) {
         console.log("[HyperMD] mode-loader will retry loading " + mode);
       }
-      setTimeout(function() {
+      setTimeout(function () {
         self.startLoadMode(mode, line >= 0 ? -3 : line + 1);
       }, 1000);
     };

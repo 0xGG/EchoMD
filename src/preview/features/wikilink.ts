@@ -3,6 +3,8 @@
  * [[...]]
  */
 
+import { uslug } from "../heading-id-generator";
+
 export default (md: any) => {
   // @ts-ignore
   md.inline.ruler.before("autolink", "wikilink", (state, silent) => {
@@ -35,6 +37,7 @@ export default (md: any) => {
     if (content && !silent) {
       const token = state.push("wikilink");
       token.content = content;
+      token.meta = `wikilink-` + uslug(content) + "-" + state.pos;
 
       state.pos += content.length + 2 * tag.length;
       return true;
@@ -44,7 +47,7 @@ export default (md: any) => {
   });
 
   md.renderer.rules.wikilink = (tokens, idx) => {
-    const { content } = tokens[idx];
+    const { content, meta } = tokens[idx];
     if (!content) {
       return;
     }
@@ -59,6 +62,6 @@ export default (md: any) => {
       wikiLink = splits[0].trim();
     }
 
-    return `<a href="${wikiLink}" data-wikilink-url=${wikiLink}>${linkText}</a>`;
+    return `<a id="${meta}" href="${wikiLink}" data-wikilink-url=${wikiLink}>${linkText}</a>`;
   };
 };

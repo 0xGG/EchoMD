@@ -5,7 +5,7 @@
 
 import React, { useState } from "react";
 import ReactDOM from "react-dom";
-import { WidgetCreator, WidgetArgs } from "..";
+import { WidgetArgs, WidgetCreator } from "..";
 
 function Hello(props: WidgetArgs) {
   const [value, setValue] = useState<string>(props.attributes.value || "");
@@ -18,7 +18,7 @@ function Hello(props: WidgetArgs) {
       }}
     >
       <span>
-        Hello, world! I am <b>{value || "VickyMD"}</b>
+        Hello, world! I am <b>{value || "EchoMD"}</b>
       </span>
       <br></br>
       <input

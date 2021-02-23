@@ -5,7 +5,7 @@ interface Props {
 }
 export function Widget(props: Props) {
   return (
-    <span className="vickymd-widget" onClick={event => event.preventDefault()}>
+    <span className="echomd-widget" onClick={(event) => event.preventDefault()}>
       {props.children}
     </span>
   );

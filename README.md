@@ -1,4 +1,4 @@
-# VickyMD 微记
+# EchoMD
 
 > Please note that this project is released under **[AGPLv3](https://choosealicense.com/licenses/agpl-3.0/)**.
 

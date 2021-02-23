@@ -6,7 +6,6 @@
 
 import * as CodeMirror from "codemirror";
 import "codemirror/mode/markdown/markdown";
-
 import "./hypermd.css";
 
 /**
@@ -683,7 +682,7 @@ CodeMirror.defineMode(
             while (stream.eat(/[^|\]]/)) {
               eaten = true;
             }
-            if (eaten || stream.peek().match(/[\|\]]/)) {
+            if (eaten || (stream.peek() || "").match(/[\|\]]/)) {
               if (stream.peek() === "]") {
                 // [[a|b]] => b
                 // [[ab]]  => ab

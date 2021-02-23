@@ -5,18 +5,12 @@
  * DESCRIPTION: Inline code fold that aims to get VickyWidgets work `@appname arg1=val1 arg2=val2`
  */
 
-import {
-  FolderFunc,
-  registerFolder,
-  breakMark,
-  RequestRangeResult,
-  FoldStream,
-} from "./fold";
-import { Attributes } from "./attributes/index";
-import { registerWidgetCreator, getWidgetCreator } from "../widget/index";
-import { HelloWidget } from "../widget/hello/hello";
-import { ErrorWidget } from "../widget/error/error";
 import { TextMarker } from "codemirror";
+import { ErrorWidget } from "../widget/error/error";
+import { HelloWidget } from "../widget/hello/hello";
+import { getWidgetCreator, registerWidgetCreator } from "../widget/index";
+import { Attributes } from "./attributes/index";
+import { FoldStream, registerFolder, RequestRangeResult } from "./fold";
 
 registerWidgetCreator("hello", HelloWidget);
 registerWidgetCreator("error", ErrorWidget);
@@ -96,7 +90,7 @@ export const WidgetFolder = function (
     if (!editor || !marker) {
       return;
     }
-    const pos = marker.find();
+    const pos = marker.find() as CodeMirror.MarkerRange;
     if (!pos) {
       return;
     }
@@ -127,7 +121,7 @@ export const WidgetFolder = function (
     if (!editor || !marker) {
       return;
     }
-    const pos = marker.find();
+    const pos = marker.find() as CodeMirror.MarkerRange;
     if (!pos) {
       return;
     }

@@ -1,4 +1,4 @@
-/* VickyMD
+/* EchoMD
  * Distributed under AGPL3
  *
  * DESCRIPTION: WaveDrom powerpack
@@ -9,17 +9,17 @@
  *
  */
 import * as CodeMirror from "codemirror";
-import {
-  registerRenderer,
-  CodeRenderer,
-  getAddon as getFoldCode
-} from "../addon/fold-code";
 import { getAddon as getFold } from "../addon/fold";
+import {
+  CodeRenderer,
+  getAddon as getFoldCode,
+  registerRenderer,
+} from "../addon/fold-code";
 
 export const WaveDromRenderer: CodeRenderer = (code, info) => {
   const targetClass = info.changed
     ? "vickeymd-wavedrom-editor"
-    : "vickymd-wavedrom-preview";
+    : "echomd-wavedrom-preview";
   let seq = document.getElementsByClassName(targetClass).length; // Math.round(1e9 * Math.random()) + Date.now();
   const id = targetClass + seq;
   const el = document.createElement("div");
@@ -34,7 +34,7 @@ export const WaveDromRenderer: CodeRenderer = (code, info) => {
     el.innerText = error.toString();
     return {
       element: el,
-      asyncRenderer: null
+      asyncRenderer: null,
     };
   }
 
@@ -50,7 +50,7 @@ export const WaveDromRenderer: CodeRenderer = (code, info) => {
 
   return {
     element: el,
-    asyncRenderer: asyncRenderer
+    asyncRenderer: asyncRenderer,
   };
 };
 
@@ -64,15 +64,15 @@ if (window["WaveDrom"]) {
     name: "wavedrom",
     pattern: /^wavedrom$/i,
     renderer: WaveDromRenderer,
-    suggested: true
+    suggested: true,
   });
-  if (window["VICKYMD_DEBUG"]) {
+  if (window["ECHOMD_DEBUG"]) {
     console.log("[HyperMD] PowerPack fold-code-with-wavedrom loaded.");
   }
 } else {
-  if (window["VICKYMD_DEBUG"]) {
+  if (window["ECHOMD_DEBUG"]) {
     console.log(`[HyperMD] PowerPack fold-code-with-wavedrom failed to load.
-Please include  
+Please include
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/wavedrom/2.1.2/skins/default.js" type="text/javascript"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/wavedrom/2.1.2/wavedrom.min.js" type="text/javascript"></script>

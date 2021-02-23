@@ -1,7 +1,7 @@
-import { Attributes } from "../addon/attributes/index";
 import { Editor } from "codemirror";
+import { Attributes } from "../addon/attributes/index";
 
-// VickyMD, copyright (c) by 0xGG Team
+// EchoMD, copyright (c) by 0xGG Team
 // Distributed under an AGPL3
 // DESCRIPTION: The widget component that allows you to create and register widget
 //

@@ -15,6 +15,8 @@
     "forceConsistentCasingInFileNames": true,
     "moduleResolution": "node",
     "resolveJsonModule": true,
+    "noFallthroughCasesInSwitch": true,
+    "strictNullChecks": false,
     "jsx": "react"
   },
   "include": [

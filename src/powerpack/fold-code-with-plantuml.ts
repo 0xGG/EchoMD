@@ -7,13 +7,12 @@
 //   <script src="https://cdn.jsdelivr.net/npm/plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js"></script>
 
 import * as CodeMirror from "codemirror";
+import { getAddon as getFold } from "../addon/fold";
 import {
-  registerRenderer,
   CodeRenderer,
   getAddon as getFoldCode,
-  convertNumberToString
+  registerRenderer,
 } from "../addon/fold-code";
-import { getAddon as getFold } from "../addon/fold";
 
 export const PlantUMLRenderer: CodeRenderer = (code, info) => {
   const id = "_plantuml_id_" + Math.round(1e9 * Math.random()).toString(36);
@@ -30,7 +29,7 @@ export const PlantUMLRenderer: CodeRenderer = (code, info) => {
   el.appendChild(img);
   return {
     element: el,
-    asyncRenderer: null
+    asyncRenderer: null,
   };
 };
 
@@ -44,15 +43,15 @@ if (window["plantumlEncoder"]) {
     name: "plantuml",
     pattern: /^(plantuml|puml)$/i,
     renderer: PlantUMLRenderer,
-    suggested: true
+    suggested: true,
   });
-  if (window["VICKYMD_DEBUG"]) {
+  if (window["ECHOMD_DEBUG"]) {
     console.log("[HyperMD] PowerPack fold-code-with-plantuml loaded.");
   }
 } else {
-  if (window["VICKYMD_DEBUG"]) {
+  if (window["ECHOMD_DEBUG"]) {
     console.log(`[HyperMD] PowerPack fold-code-with-plantuml failed to load.
-Please include  
+Please include
 
   <script src="https://cdn.jsdelivr.net/npm/plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js"></script>
 

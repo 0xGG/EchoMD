@@ -13,17 +13,17 @@
 
 import * as _twemoji_module from "twemoji";
 import {
-  defaultOption,
   defaultChecker,
-  defaultRenderer,
-  EmojiRenderer,
   defaultDict,
-  EmojiChecker
+  defaultOption,
+  defaultRenderer,
+  EmojiChecker,
+  EmojiRenderer,
 } from "../addon/fold-emoji";
 
 /** twemoji */
-var twemoji: typeof _twemoji_module =
-  _twemoji_module || this["twemoji"] || window["twemoji"];
+const twemoji: typeof _twemoji_module =
+  _twemoji_module || (this as any)["twemoji"] || window["twemoji"];
 
 var twemojiOptions = null;
 
@@ -34,7 +34,7 @@ export function setOptions(options?: object | Function) {
 
 export const twemojiChecker: EmojiChecker = defaultChecker;
 
-export const twemojiRenderer: EmojiRenderer = text => {
+export const twemojiRenderer: EmojiRenderer = (text) => {
   var emojiStr = defaultDict[text];
   var html = twemojiOptions
     ? twemoji.parse(emojiStr, twemojiOptions)
@@ -55,7 +55,7 @@ if (typeof twemoji !== "undefined") {
   defaultOption.emojiChecker = twemojiChecker;
   defaultOption.emojiRenderer = twemojiRenderer;
 } else {
-  if (window["VICKYMD_DEBUG"]) {
+  if (window["ECHOMD_DEBUG"]) {
     console.error(
       "[HyperMD] PowerPack fold-emoji-with-twemoji loaded, but twemoji not found."
     );

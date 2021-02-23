@@ -1,4 +1,4 @@
-/* VickyMD
+/* EchoMD
  * Distributed under AGPL3
  *
  * Please include the following in your index.html file
@@ -9,14 +9,14 @@
  */
 
 import * as CodeMirror from "codemirror";
-import {
-  registerRenderer,
-  CodeRenderer,
-  getAddon as getFoldCode,
-  convertNumberToString
-} from "../addon/fold-code";
-import { getAddon as getFold } from "../addon/fold";
 import * as YAML from "yamljs";
+import { getAddon as getFold } from "../addon/fold";
+import {
+  CodeRenderer,
+  convertNumberToString,
+  getAddon as getFoldCode,
+  registerRenderer,
+} from "../addon/fold-code";
 
 export const EchartsRenderer: CodeRenderer = (code, info) => {
   var id = "_echarts_id_" + Math.round(1e9 * Math.random()).toString(36);
@@ -44,7 +44,7 @@ export const EchartsRenderer: CodeRenderer = (code, info) => {
   }
   return {
     element: el,
-    asyncRenderer: null
+    asyncRenderer: null,
   };
 };
 
@@ -58,10 +58,10 @@ if (window["echarts"]) {
     name: "echarts",
     pattern: /^echarts(\s*$|\s+\{)/i,
     renderer: EchartsRenderer,
-    suggested: true
+    suggested: true,
   });
 } else {
-  if (window["VICKYMD_DEBUG"]) {
+  if (window["ECHOMD_DEBUG"]) {
     console.error(`[HyperMD] PowerPack fold-code-with-echarts failed to load.
 Please include
 

@@ -1,6 +1,6 @@
 // Modified from github.com/shd101wyy/mume
 
-function uslug(str: string): string {
+export function uslug(str: string): string {
   return str.replace(/[\s!@#$%^&*()-=_+~`[\]{}\\<>?\/]+/g, "-");
 }
 

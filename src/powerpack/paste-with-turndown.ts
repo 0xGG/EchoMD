@@ -12,7 +12,7 @@
 //
 
 import * as TurndownService from "turndown";
-import { PasteConvertor, suggestedOption, defaultOption } from "../addon/paste";
+import { defaultOption, PasteConvertor } from "../addon/paste";
 
 export const TurndownConvertor: PasteConvertor = (html) => {
   // strip <a> without href
@@ -65,7 +65,7 @@ if (typeof TurndownService != "undefined") {
   // Use this convertor as default convertor
   defaultOption.convertor = TurndownConvertor;
 } else {
-  if (window["VICKYMD_DEBUG"]) {
+  if (window["ECHOMD_DEBUG"]) {
     console.error(
       "[HyperMD] PowerPack paste-with-turndown loaded, but turndown not found."
     );
