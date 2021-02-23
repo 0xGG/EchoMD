@@ -1,5 +1,5 @@
 {
-  "name": "echomd",
+  "name": "@0xgg/echomd",
   "version": "1.0.0",
   "description": "An experimental WYSIWYG markdown editor built on top of HyperMD with extended Widgets support",
   "main": "./everything.js",
