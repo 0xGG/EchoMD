@@ -1,7 +1,10 @@
 // Modified from github.com/shd101wyy/mume
 
-export function uslug(str: string): string {
-  return str.replace(/[\s!@#$%^&*()-=_+~`[\]{}\\<>?\/]+/g, "-");
+export function uslug(str: string, separater = "-"): string {
+  return str.replace(
+    /[\.\s!@#$%^&*()\-=_+~`[\]{}\\<>?\/\|（）【】:：，。]+/g,
+    separater
+  );
 }
 
 export default class HeadingIdGenerator {
