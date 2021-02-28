@@ -17,6 +17,7 @@ import { VegaLiteRenderer } from "../powerpack/fold-code-with-vega-lite";
 import { WaveDromRenderer } from "../powerpack/fold-code-with-wavedrom";
 import { getWidgetCreator } from "../widget/index";
 import FenceEnhancer from "./features/fence";
+import LinkEnhancer from "./features/link";
 // import * as YAML from "yamljs";
 import MathEnhancer from "./features/math";
 import TagEnhancer from "./features/tag";
@@ -49,6 +50,7 @@ MathEnhancer(md);
 WidgetEnhancer(md);
 FenceEnhancer(md);
 WikiLinkEnhancer(md);
+LinkEnhancer(md);
 
 interface RenderMarkdownOutput {
   html: string;

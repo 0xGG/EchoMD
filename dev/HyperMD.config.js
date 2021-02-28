@@ -62,6 +62,7 @@ exports.components = {
   "preview/features/widget": "PreviewFeatureWidget",
   "preview/features/fence": "PreviewFeatureFence",
   "preview/features/wikilink": "PreviewFeatureWikiLink",
+  "preview/features/link": "PreviewFeatureLink",
   // ** Theme
   "theme/index": "Theme",
   // ** Emoji
@@ -99,6 +100,7 @@ exports.globalNames = {
   "markdown-it-ins": "MarkdownItIns",
   "markdown-it-sub": "MarkdownItSub",
   "markdown-it-sup": "MarkdownItSup",
+  "markdown-it-for-inline": "MarkdownItForInline",
   react: "React",
   "react-dom": "ReactDOM",
   vega: "vega",

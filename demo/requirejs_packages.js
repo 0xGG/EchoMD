@@ -38,6 +38,10 @@ var requirejs_packages = [
   { name: "markdown-it-ins", main: "dist/markdown-it-ins.min.js" },
   { name: "markdown-it-sub", main: "dist/markdown-it-sub.min.js" },
   { name: "markdown-it-sup", main: "dist/markdown-it-sup.min.js" },
+  {
+    name: "markdown-it-for-inline",
+    main: "dist/markdown-it-for-inline.min.js",
+  },
 
   {
     name: "markdown-it-task-lists",
