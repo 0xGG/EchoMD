@@ -1,6 +1,8 @@
 language: node_js
 node_js:
   - "lts/erbium"
+install:
+  - yarn
 script:
   - yarn
   # no unit test yet
