@@ -1,4 +1,4 @@
-import { StopRegExp } from "../../addon/common/index";
+import { BlocKReferenceStopRegExp } from "../../addon/common/index";
 
 /**
  * ^block-reference
@@ -6,13 +6,11 @@ import { StopRegExp } from "../../addon/common/index";
 export default (md: any) => {
   // @ts-ignore
   md.inline.ruler.before("escape", "block_reference", (state, silent) => {
-    console.log("block_reference: ", state);
-
     if (
       !(
         (state.src[state.pos - 1] || "").match(/(^|\s)$/) &&
         state.src[state.pos] === "^" &&
-        !state.src[state.pos + 1].match(StopRegExp)
+        !state.src[state.pos + 1].match(BlocKReferenceStopRegExp)
       )
     ) {
       return false;
@@ -22,7 +20,7 @@ export default (md: any) => {
     let end = -1;
     let i = state.pos + 1;
     while (i < state.src.length) {
-      if (state.src[i].match(StopRegExp)) {
+      if (state.src[i].match(BlocKReferenceStopRegExp)) {
         if (state.src[i] !== "\n") {
           return false;
         } else {
