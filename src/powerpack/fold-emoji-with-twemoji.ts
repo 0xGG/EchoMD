@@ -11,7 +11,7 @@
 // 使用前请注意阅读 twemoji 使用许可
 //
 
-import * as _twemoji_module from "twemoji";
+import _twemoji_module from "twemoji";
 import { getTwemojiOptions } from "../addon/emoji/index";
 import {
   defaultChecker,
