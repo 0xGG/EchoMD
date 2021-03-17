@@ -292,7 +292,7 @@ function renderPreview(
       <!-- katex -->
       <link rel="stylesheet" href=${
         requires.KaTeXCSS ||
-        "https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css"
+        "https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/katex.min.css"
       }>
 
       <!-- prism github theme -->
