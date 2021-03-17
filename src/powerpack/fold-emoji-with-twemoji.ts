@@ -12,6 +12,7 @@
 //
 
 import * as _twemoji_module from "twemoji";
+import { getTwemojiOptions } from "../addon/emoji/index";
 import {
   defaultChecker,
   defaultDict,
@@ -25,27 +26,21 @@ import {
 const twemoji: typeof _twemoji_module =
   _twemoji_module || (this as any)["twemoji"] || window["twemoji"];
 
-var twemojiOptions = null;
-
-/** set the 2nd argument of `twemoji.parse()` */
-export function setOptions(options?: object | Function) {
-  twemojiOptions = options;
-}
-
 export const twemojiChecker: EmojiChecker = defaultChecker;
 
 export const twemojiRenderer: EmojiRenderer = (text) => {
-  var emojiStr = defaultDict[text];
-  var html = twemojiOptions
+  const emojiStr = text.startsWith(":") ? defaultDict[text] : text;
+  const twemojiOptions = getTwemojiOptions();
+  const html = twemojiOptions
     ? twemoji.parse(emojiStr, twemojiOptions)
     : twemoji.parse(emojiStr);
 
   // If twemoji failed to render, fallback to defaultRenderer
   if (!/^<img /i.test(html)) return defaultRenderer(text);
 
-  var attr = /([\w-]+)="(.+?)"/g;
-  var ans = document.createElement("img");
-  var t: RegExpMatchArray;
+  const attr = /([\w-]+)="(.+?)"/g;
+  const ans = document.createElement("img");
+  let t: RegExpMatchArray;
   while ((t = attr.exec(html))) ans.setAttribute(t[1], t[2]);
   return ans;
 };

@@ -6,6 +6,7 @@
 
 import * as CodeMirror from "codemirror";
 import "codemirror/mode/markdown/markdown";
+import { EmojiRegExp } from "../addon/emoji/index";
 import "./hypermd.css";
 
 /**
@@ -600,6 +601,12 @@ CodeMirror.defineMode(
 
         //#region mark, ins, sub, sup
         // TODO: Implement support
+        //#endregion
+
+        //#region emoji
+        if (stream.current().match(EmojiRegExp)) {
+          ans += ` formatting-emoji-regexpr formatting-emoji `;
+        }
         //#endregion
 
         //#region Link, BareLink, Footnote, Wikilink etc

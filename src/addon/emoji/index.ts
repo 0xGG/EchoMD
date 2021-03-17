@@ -1,6 +1,6 @@
 // DESCRIPTION: Emoji dict. Copied and modified from https://github.com/markdown-it/markdown-it-emoji/blob/master/lib/data/full.json and also (function (dest: typeof defaultDict) https://gist.github.com/rxaviers/7360908
 
-const EmojiDefinitions: { [key: string]: string } = {
+export const EmojiDefinitions: { [key: string]: string } = {
   "100": "💯",
   "1234": "🔢",
   grinning: "😀",
@@ -1841,4 +1841,20 @@ const EmojiDefinitions: { [key: string]: string } = {
   wales: "🏴󠁧󠁢󠁷󠁬󠁳󠁿",
 };
 
-export default EmojiDefinitions;
+var twemojiOptions: object = {
+  folder: "svg",
+  ext: ".svg",
+};
+
+/** set the 2nd argument of `twemoji.parse()` */
+export function setTwemojiOptions(options?: object | Function) {
+  twemojiOptions = options;
+  return twemojiOptions;
+}
+
+export function getTwemojiOptions() {
+  return twemojiOptions;
+}
+
+// Referred from https://github.com/mathiasbynens/emoji-regex/blob/main/src/index.js
+export const EmojiRegExp = /<% RGI_Emoji %>|\p{Emoji_Presentation}|\p{Emoji}\uFE0F|\p{Emoji_Modifier_Base}/gu;

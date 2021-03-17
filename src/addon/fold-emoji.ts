@@ -8,7 +8,7 @@ import * as CodeMirror from "codemirror";
 import { Position } from "codemirror";
 import { Addon, suggestedEditorConfig } from "../core";
 import { cm_t } from "../core/type";
-import EmojiDefinitions from "./emoji/index";
+import { EmojiDefinitions, EmojiRegExp } from "./emoji/index";
 import {
   breakMark,
   FolderFunc,
@@ -44,7 +44,7 @@ export const EmojiFolder: FolderFunc = (stream, token) => {
   const from: Position = { line: stream.lineNo, ch: token.start };
   const to: Position = { line: stream.lineNo, ch: token.end };
 
-  var name = token.string; // with ":"
+  var name = token.string; // with ":" or emoji
   var addon = getAddon(cm);
   if (!addon.isEmoji(name)) return null;
 
@@ -148,7 +148,9 @@ export class FoldEmoji implements Addon.Addon, Options {
   }
 
   isEmoji(text: string) {
-    return text in this.myEmoji || this.emojiChecker(text);
+    return (
+      text in this.myEmoji || text.match(EmojiRegExp) || this.emojiChecker(text)
+    );
   }
 
   foldEmoji(text: string, from: CodeMirror.Position, to: CodeMirror.Position) {

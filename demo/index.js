@@ -99,12 +99,9 @@ require([
   "hypermd/powerpack/fold-code-with-echarts",
   "hypermd/powerpack/fold-code-with-wavedrom",
 
-  // 'hypermd/powerpack/fold-emoji-with-twemoji',
-
+  "hypermd/powerpack/fold-emoji-with-twemoji",
   "hypermd/powerpack/insert-file-with-smms",
-
   "hypermd/powerpack/hover-with-marked",
-
   "hypermd/powerpack/fold-math-with-katex",
   // 'hypermd/powerpack/fold-math-with-mathjax',
 
@@ -165,7 +162,7 @@ require([
   style.innerText = `
 .CodeMirror-cursor.CodeMirror-cursor {
   border-left: 2px solid rgba(74, 144, 226, 1);
-}    
+}
 `;
 
   // Set theme

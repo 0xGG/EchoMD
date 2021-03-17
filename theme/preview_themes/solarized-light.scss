@@ -9,5 +9,13 @@ html {
   $blockquote-bg: $hashtag-bg;
   $inline-code-bg: $hashtag-bg;
 
-  @include github($fg, $bg, $url-color, $hashtag-bg, $hashtag-color, $inline-code-bg, $blockquote-bg);
+  @include github(
+    $fg,
+    $bg,
+    $url-color,
+    $hashtag-bg,
+    $hashtag-color,
+    $inline-code-bg,
+    $blockquote-bg
+  );
 }

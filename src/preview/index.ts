@@ -7,7 +7,8 @@ import MarkdownItMark from "markdown-it-mark";
 import MarkdownItSub from "markdown-it-sub";
 import MarkdownItSup from "markdown-it-sup";
 import MarkdownItTaskLists from "markdown-it-task-lists";
-import EmojiDefinitions from "../addon/emoji/index";
+import * as twemoji from "twemoji";
+import { EmojiDefinitions, getTwemojiOptions } from "../addon/emoji/index";
 import { EchartsRenderer } from "../powerpack/fold-code-with-echarts";
 import { MermaidRenderer } from "../powerpack/fold-code-with-mermaid";
 // Powerpacks
@@ -118,6 +119,7 @@ function performAfterWorks(
 ) {
   renderWidgets(previewElement);
   renderCodeFences(previewElement, isPresentation);
+  renderTwemoji(previewElement);
 }
 
 const RevealJSThemes = {
@@ -474,6 +476,10 @@ function renderCodeFences(previewElement: HTMLElement, isPresentation = false) {
       }
     }
   }
+}
+
+function renderTwemoji(previewElement: HTMLElement) {
+  twemoji.parse(previewElement as any, getTwemojiOptions());
 }
 
 /**
