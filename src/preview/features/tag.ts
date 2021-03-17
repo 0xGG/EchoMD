@@ -1,6 +1,6 @@
+import { StopRegExp } from "../../addon/common/index";
 import { uslug } from "../heading-id-generator";
 
-const StopRegExp = /[\s@#,.!$%^&*()\[\]-_+=~`<>?\\，。]/;
 export default function (md: any) {
   md.inline.ruler.before("escape", "tag", (state: any, silent: boolean) => {
     let tagMode = null; // TODO: Support @mention later
@@ -57,7 +57,7 @@ export default function (md: any) {
       const token = state.push("tag");
       token.content = content.trim();
       token.tagMode = tagMode;
-      token.meta = `wikilink-` + uslug(content) + "-" + state.pos;
+      token.attrPush(["id", `tag-` + uslug(content) + "-" + state.pos]);
 
       if (
         (end < state.src.length && state.src[end].match(/\s/)) ||
@@ -74,9 +74,10 @@ export default function (md: any) {
   });
 
   md.renderer.rules.tag = (tokens: any[], idx: number) => {
-    const content: string = tokens[idx] ? tokens[idx].content : null;
-    const meta: string = tokens[idx] ? tokens[idx].meta : "";
-    const tagMode = tokens[idx] ? tokens[idx].tagMode : null;
+    const token = tokens[idx];
+    const content = token.content || "";
+    const id = token.attrGet("id") || "";
+    const tagMode = token.tagMode || null;
     if (!content || !tagMode) {
       return `<a class="tag tag-error" data-error="Invalid tag">loading...</a>`;
     } else if (tagMode === "mention") {
@@ -84,7 +85,7 @@ export default function (md: any) {
     } else if (tagMode === "topic" /* && !content.match(/\s/) */) {
       // for topic, space is not allowed.
       // return `<a class="tag tag-topic" data-topic="${content}">loading...</a>`;
-      return `<a id="${meta}" class="tag tag-topic" data-topic="${content}">${
+      return `<a id="${id}" class="tag tag-topic" data-topic="${content}">${
         content.match(/\s/) ? `#${content}#` : `#${content}`
       }</a>`;
     } else {

@@ -393,6 +393,13 @@
       }
     }
 
+    .block-reference {
+      font-size: 0.8rem;
+      position: relative;
+      top: -6px;
+      color: $fg-subtle;
+    }
+
     // very nice tutorial & intro
     // https://www.smashingmagazine.com/2015/01/designing-for-print-with-css/
     @media print {

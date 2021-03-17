@@ -63,6 +63,7 @@ exports.components = {
   "preview/features/fence": "PreviewFeatureFence",
   "preview/features/wikilink": "PreviewFeatureWikiLink",
   "preview/features/link": "PreviewFeatureLink",
+  "preview/features/block-reference": "PreviewFeatureBlockReference",
   // ** Theme
   "theme/index": "Theme",
   // ** Emoji

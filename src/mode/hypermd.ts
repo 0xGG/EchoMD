@@ -6,6 +6,7 @@
 
 import * as CodeMirror from "codemirror";
 import "codemirror/mode/markdown/markdown";
+import { StopRegExp } from "../addon/common/index";
 import { EmojiRegExp } from "../addon/emoji/index";
 import "./hypermd.css";
 
@@ -610,8 +611,12 @@ CodeMirror.defineMode(
         //#endregion
 
         //#block reference
-        if (!stream.peek() && stream.current().startsWith("^")) {
-          ans += ` formatting-reference`;
+        if (
+          !stream.peek() &&
+          stream.current().startsWith("^") &&
+          !stream.current().slice(1).match(StopRegExp)
+        ) {
+          ans += ` formatting-block-reference`;
         }
         //#endregion
 

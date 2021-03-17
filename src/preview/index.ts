@@ -17,6 +17,7 @@ import { VegaRenderer } from "../powerpack/fold-code-with-vega";
 import { VegaLiteRenderer } from "../powerpack/fold-code-with-vega-lite";
 import { WaveDromRenderer } from "../powerpack/fold-code-with-wavedrom";
 import { getWidgetCreator } from "../widget/index";
+import BlockReferenceEnhancer from "./features/block-reference";
 import FenceEnhancer from "./features/fence";
 import LinkEnhancer from "./features/link";
 // import * as YAML from "yamljs";
@@ -51,6 +52,7 @@ MathEnhancer(md);
 WidgetEnhancer(md);
 FenceEnhancer(md);
 WikiLinkEnhancer(md);
+BlockReferenceEnhancer(md);
 LinkEnhancer(md);
 
 interface RenderMarkdownOutput {
