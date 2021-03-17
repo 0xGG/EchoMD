@@ -1,8 +1,8 @@
 language: node_js
 node_js:
-  - "8"
+  - "lts/erbium"
 script:
-  - npm run build
+  - yarn
   # no unit test yet
 before_deploy:
   - sed -i -e '/.js$/d' -e '/.css$/d' -e '/.d.ts$/d' -e '/^docs/d' .gitignore

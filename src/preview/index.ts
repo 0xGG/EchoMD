@@ -7,7 +7,7 @@ import MarkdownItMark from "markdown-it-mark";
 import MarkdownItSub from "markdown-it-sub";
 import MarkdownItSup from "markdown-it-sup";
 import MarkdownItTaskLists from "markdown-it-task-lists";
-import * as twemoji from "twemoji";
+import twemoji from "twemoji";
 import { EmojiDefinitions, getTwemojiOptions } from "../addon/emoji/index";
 import { EchartsRenderer } from "../powerpack/fold-code-with-echarts";
 import { MermaidRenderer } from "../powerpack/fold-code-with-mermaid";
@@ -660,4 +660,11 @@ function printPreview(
   });
 }
 
-export { renderMarkdown, renderPreview, printPDF, printPreview, md };
+export {
+  renderMarkdown,
+  renderPreview,
+  printPDF,
+  printPreview,
+  md,
+  renderTwemoji,
+};
