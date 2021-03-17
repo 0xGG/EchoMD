@@ -68,6 +68,8 @@ exports.components = {
   "theme/index": "Theme",
   // ** Emoji
   "addon/emoji/index": "Emoji",
+  // ** Common
+  "addon/regexp/index": "RegExp",
 };
 
 /**

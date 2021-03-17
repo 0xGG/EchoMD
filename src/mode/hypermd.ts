@@ -6,8 +6,11 @@
 
 import * as CodeMirror from "codemirror";
 import "codemirror/mode/markdown/markdown";
-import { BlocKReferenceStopRegExp, HashTagRegExp } from "../addon/common/index";
-import { EmojiRegExp } from "../addon/emoji/index";
+import {
+  BlocKReferenceStopRegExp,
+  EmojiRegExp,
+  HashTagRegExp,
+} from "../addon/regexp/index";
 import "./hypermd.css";
 
 /**

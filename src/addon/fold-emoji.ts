@@ -8,13 +8,14 @@ import * as CodeMirror from "codemirror";
 import { Position } from "codemirror";
 import { Addon, suggestedEditorConfig } from "../core";
 import { cm_t } from "../core/type";
-import { EmojiDefinitions, EmojiRegExp } from "./emoji/index";
+import { EmojiDefinitions } from "./emoji/index";
 import {
   breakMark,
   FolderFunc,
   registerFolder,
   RequestRangeResult,
 } from "./fold";
+import { EmojiRegExp } from "./regexp/index";
 
 /********************************************************************************** */
 

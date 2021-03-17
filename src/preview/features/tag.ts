@@ -1,4 +1,4 @@
-import { StopRegExp } from "../../addon/common/index";
+import { StopRegExp } from "../../addon/regexp/index";
 import { uslug } from "../heading-id-generator";
 
 export default function (md: any) {

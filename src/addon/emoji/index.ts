@@ -1855,6 +1855,3 @@ export function setTwemojiOptions(options?: object | Function) {
 export function getTwemojiOptions() {
   return twemojiOptions;
 }
-
-// Referred from https://github.com/mathiasbynens/emoji-regex/blob/main/src/index.js
-export const EmojiRegExp = /<% RGI_Emoji %>|\p{Emoji_Presentation}|\p{Emoji}\uFE0F|\p{Emoji_Modifier_Base}/gu;

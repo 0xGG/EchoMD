@@ -27,6 +27,7 @@ const plugins = {
       generator: false,
       dangerousForOf: true, // simplify `for (let i=0;i...)` to `for (let it of arr)`
     },
+    exclude: ["src/addon/regexp/index.ts"],
   }),
   json: json(),
 };

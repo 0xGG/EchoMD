@@ -1,4 +1,4 @@
-import { BlocKReferenceStopRegExp } from "../../addon/common/index";
+import { BlocKReferenceStopRegExp } from "../../addon/regexp/index";
 
 /**
  * ^block-reference
