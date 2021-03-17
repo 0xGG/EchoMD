@@ -6,6 +6,11 @@
 
 import * as CodeMirror from "codemirror";
 import "codemirror/mode/markdown/markdown";
+import {
+  BlocKReferenceStopRegExp,
+  EmojiRegExp,
+  HashTagRegExp,
+} from "../addon/regexp/index";
 import "./hypermd.css";
 
 /**
@@ -20,7 +25,6 @@ const listRE = /^(?:[*\-+]|^[0-9]+([.)]))\s+/;
 const urlRE = /^((?:(?:aaas?|about|acap|adiumxtra|af[ps]|aim|apt|attachment|aw|beshare|bitcoin|bolo|callto|cap|chrome(?:-extension)?|cid|coap|com-eventbrite-attendee|content|crid|cvs|data|dav|dict|dlna-(?:playcontainer|playsingle)|dns|doi|dtn|dvb|ed2k|facetime|feed|file|finger|fish|ftp|geo|gg|git|gizmoproject|go|gopher|gtalk|h323|hcp|https?|iax|icap|icon|im|imap|info|ipn|ipp|irc[6s]?|iris(?:\.beep|\.lwz|\.xpc|\.xpcs)?|itms|jar|javascript|jms|keyparc|lastfm|ldaps?|magnet|mailto|maps|market|message|mid|mms|ms-help|msnim|msrps?|mtqp|mumble|mupdate|mvn|news|nfs|nih?|nntp|notes|oid|opaquelocktoken|palm|paparazzi|platform|pop|pres|proxy|psyc|query|res(?:ource)?|rmi|rsync|rtmp|rtsp|secondlife|service|session|sftp|sgn|shttp|sieve|sips?|skype|sm[bs]|snmp|soap\.beeps?|soldat|spotify|ssh|steam|svn|tag|teamspeak|tel(?:net)?|tftp|things|thismessage|tip|tn3270|tv|udp|unreal|urn|ut2004|vemmi|ventrilo|view-source|webcal|wss?|wtai|wyciwyg|xcon(?:-userid)?|xfire|xmlrpc\.beeps?|xmpp|xri|ymsgr|z39\.50[rs]?):(?:\/{1,3}|[a-z0-9%])|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}\/)(?:[^\s()<>]|\([^\s()<>]*\))+(?:\([^\s()<>]*\)|[^\s`*!()\[\]{};:'".,<>?«»“”‘’]))/i; // from CodeMirror/mode/gfm
 const emailRE = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 const url2RE = /^\.{0,2}\/[^\>\s]+/;
-const hashtagRE = /^(?:[-()/a-zA-Z0-9ァ-ヺー-ヾｦ-ﾟｰ０-９Ａ-Ｚａ-ｚぁ-ゖ゙-ゞー々ぁ-んァ-ヾ一-\u9FEF㐀-䶵﨎﨏﨑﨓﨔﨟﨡﨣﨤﨧-﨩]|[\ud840-\ud868][\udc00-\udfff]|\ud869[\udc00-\uded6\udf00-\udfff]|[\ud86a-\ud86c][\udc00-\udfff]|\ud86d[\udc00-\udf34\udf40-\udfff]|\ud86e[\udc00-\udc1d])+/;
 
 export type TokenFunc = (
   stream: CodeMirror.StringStream,
@@ -602,6 +606,22 @@ CodeMirror.defineMode(
         // TODO: Implement support
         //#endregion
 
+        //#region emoji
+        if (stream.current().match(EmojiRegExp)) {
+          ans += ` formatting-emoji-regexpr formatting-emoji `;
+        }
+        //#endregion
+
+        //#block reference
+        if (
+          !stream.peek() &&
+          stream.current().startsWith("^") &&
+          !stream.current().slice(1).match(BlocKReferenceStopRegExp)
+        ) {
+          ans += ` formatting-block-reference`;
+        }
+        //#endregion
+
         //#region Link, BareLink, Footnote, Wikilink etc
 
         if (stream.current() === "[" && stream.eat("[")) {
@@ -865,7 +885,7 @@ CodeMirror.defineMode(
                   .slice(stream.pos)
                   .replace(/\\./g, "");
 
-                if ((tmp = hashtagRE.exec(escape_removed_str))) {
+                if ((tmp = HashTagRegExp.exec(escape_removed_str))) {
                   if (/^\d+$/.test(tmp[0])) state.hmdHashtag = HashtagType.NONE;
                   else state.hmdHashtag = HashtagType.NORMAL;
 
@@ -875,7 +895,7 @@ CodeMirror.defineMode(
                     if (
                       escape_removed_str[0] === "#" &&
                       (escape_removed_str.length === 1 ||
-                        !hashtagRE.test(escape_removed_str[1]))
+                        !HashTagRegExp.test(escape_removed_str[1]))
                     ) {
                       state.hmdHashtag = HashtagType.WITH_SPACE;
                       break;
@@ -884,7 +904,7 @@ CodeMirror.defineMode(
                       escape_removed_str = escape_removed_str.slice(
                         tmp[0].length
                       );
-                      if ((tmp = escape_removed_str.match(hashtagRE))) {
+                      if ((tmp = escape_removed_str.match(HashTagRegExp))) {
                         // found a space + valid tag text parts
                         // continue this loop until tailing # is found
                         escape_removed_str = escape_removed_str.slice(
@@ -910,7 +930,7 @@ CodeMirror.defineMode(
 
               if (!/formatting/.test(ans) && !/^\s*$/.test(current)) {
                 // if invalid hashtag char found, break current parsed text part
-                tmp = current.match(hashtagRE);
+                tmp = current.match(HashTagRegExp);
                 let backUpChars = current.length - (tmp ? tmp[0].length : 0);
                 if (backUpChars > 0) {
                   stream.backUp(backUpChars);
@@ -919,7 +939,7 @@ CodeMirror.defineMode(
               }
 
               if (!endHashTag) endHashTag = stream.eol(); // end of line
-              if (!endHashTag) endHashTag = !hashtagRE.test(stream.peek()); // or next char is invalid to hashtag name
+              if (!endHashTag) endHashTag = !HashTagRegExp.test(stream.peek()); // or next char is invalid to hashtag name
               // escaped char is always invisible to stream. no worry
 
               if (endHashTag) {

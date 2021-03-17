@@ -7,7 +7,8 @@ import MarkdownItMark from "markdown-it-mark";
 import MarkdownItSub from "markdown-it-sub";
 import MarkdownItSup from "markdown-it-sup";
 import MarkdownItTaskLists from "markdown-it-task-lists";
-import EmojiDefinitions from "../addon/emoji/index";
+import * as twemoji from "twemoji";
+import { EmojiDefinitions, getTwemojiOptions } from "../addon/emoji/index";
 import { EchartsRenderer } from "../powerpack/fold-code-with-echarts";
 import { MermaidRenderer } from "../powerpack/fold-code-with-mermaid";
 // Powerpacks
@@ -16,6 +17,7 @@ import { VegaRenderer } from "../powerpack/fold-code-with-vega";
 import { VegaLiteRenderer } from "../powerpack/fold-code-with-vega-lite";
 import { WaveDromRenderer } from "../powerpack/fold-code-with-wavedrom";
 import { getWidgetCreator } from "../widget/index";
+import BlockReferenceEnhancer from "./features/block-reference";
 import FenceEnhancer from "./features/fence";
 import LinkEnhancer from "./features/link";
 // import * as YAML from "yamljs";
@@ -50,6 +52,7 @@ MathEnhancer(md);
 WidgetEnhancer(md);
 FenceEnhancer(md);
 WikiLinkEnhancer(md);
+BlockReferenceEnhancer(md);
 LinkEnhancer(md);
 
 interface RenderMarkdownOutput {
@@ -118,6 +121,7 @@ function performAfterWorks(
 ) {
   renderWidgets(previewElement);
   renderCodeFences(previewElement, isPresentation);
+  renderTwemoji(previewElement);
 }
 
 const RevealJSThemes = {
@@ -288,7 +292,7 @@ function renderPreview(
       <!-- katex -->
       <link rel="stylesheet" href=${
         requires.KaTeXCSS ||
-        "https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css"
+        "https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/katex.min.css"
       }>
 
       <!-- prism github theme -->
@@ -474,6 +478,10 @@ function renderCodeFences(previewElement: HTMLElement, isPresentation = false) {
       }
     }
   }
+}
+
+function renderTwemoji(previewElement: HTMLElement) {
+  twemoji.parse(previewElement as any, getTwemojiOptions());
 }
 
 /**

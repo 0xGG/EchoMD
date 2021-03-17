@@ -37,7 +37,7 @@ export default (md: any) => {
     if (content && !silent) {
       const token = state.push("wikilink");
       token.content = content;
-      token.meta = `wikilink-` + uslug(content) + "-" + state.pos;
+      token.attrPush(["id", `wikilink-` + uslug(content) + "-" + state.pos]);
 
       state.pos += content.length + 2 * tag.length;
       return true;
@@ -47,7 +47,9 @@ export default (md: any) => {
   });
 
   md.renderer.rules.wikilink = (tokens, idx) => {
-    const { content, meta } = tokens[idx];
+    const token = tokens[idx];
+    const content = token.content;
+    const id = token.attrGet("id") || "";
     if (!content) {
       return;
     }
@@ -62,6 +64,6 @@ export default (md: any) => {
       wikiLink = splits[0].trim();
     }
 
-    return `<a id="${meta}" href="${wikiLink}" data-wikilink-url=${wikiLink}>${linkText}</a>`;
+    return `<a id="${id}" href="${wikiLink}" data-wikilink-url=${wikiLink}>${linkText}</a>`;
   };
 };
