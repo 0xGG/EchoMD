@@ -1033,6 +1033,13 @@ $border: contrast($bg, lighten($bg, 16%), darken($bg, 16%));
       border-right: 0;
     }
   }
+
+  .cm-formatting-reference {
+    font-size: 0.8rem;
+    position: relative;
+    top: -6px;
+    color: $fg-subtle;
+  }
 }
 
 // showHint

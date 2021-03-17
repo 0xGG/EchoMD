@@ -609,6 +609,12 @@ CodeMirror.defineMode(
         }
         //#endregion
 
+        //#block reference
+        if (!stream.peek() && stream.current().startsWith("^")) {
+          ans += ` formatting-reference`;
+        }
+        //#endregion
+
         //#region Link, BareLink, Footnote, Wikilink etc
 
         if (stream.current() === "[" && stream.eat("[")) {
