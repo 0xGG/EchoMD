@@ -8,7 +8,7 @@ import * as CodeMirror from "codemirror";
 import { Position } from "codemirror";
 import { Addon, suggestedEditorConfig } from "../core";
 import { cm_t } from "../core/type";
-import { ReverseEmojiDefinitions } from "./emoji/index";
+import { EmojiDefinitions, ReverseEmojiDefinitions } from "./emoji/index";
 import {
   breakMark,
   FolderFunc,
@@ -21,15 +21,11 @@ import {
 export type EmojiRenderer = (text: string) => HTMLElement;
 export type EmojiChecker = (text: string) => boolean;
 
-export let defaultDict: Record<string, string> = {}; // Has to be initialized with setEmojiDefaultDict function
-export function setEmojiDefaultDict(newDict: Record<string, string>) {
-  defaultDict = newDict;
-}
 export const defaultChecker: EmojiChecker = (text) =>
-  text in defaultDict || text in ReverseEmojiDefinitions;
+  text in EmojiDefinitions || text in ReverseEmojiDefinitions;
 export const defaultRenderer: EmojiRenderer = (text) => {
   var el = document.createElement("span");
-  el.textContent = defaultDict[text.replace(/^:(.+?):$/, "$1")];
+  el.textContent = EmojiDefinitions[text.replace(/^:(.+?):$/, "$1")] || text;
   el.title = text;
   return el;
 };

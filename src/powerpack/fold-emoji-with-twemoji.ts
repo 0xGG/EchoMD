@@ -12,10 +12,9 @@
 //
 
 import _twemoji_module from "twemoji";
-import { getTwemojiOptions } from "../addon/emoji/index";
+import { EmojiDefinitions, getTwemojiOptions } from "../addon/emoji/index";
 import {
   defaultChecker,
-  defaultDict,
   defaultOption,
   defaultRenderer,
   EmojiChecker,
@@ -30,7 +29,7 @@ export const twemojiChecker: EmojiChecker = defaultChecker;
 
 export const twemojiRenderer: EmojiRenderer = (text) => {
   const emojiStr = text.startsWith(":")
-    ? defaultDict[text.replace(/^:(.+?):$/, "$1")]
+    ? EmojiDefinitions[text.replace(/^:(.+?):$/, "$1")]
     : text;
   const twemojiOptions = getTwemojiOptions();
   const html = twemojiOptions

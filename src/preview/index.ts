@@ -11,9 +11,9 @@ import twemoji from "twemoji";
 import {
   EmojiDefinitions,
   getTwemojiOptions,
+  setEmojiDefinitions,
   setReverseEmojiDefinitions,
 } from "../addon/emoji/index";
-import { setEmojiDefaultDict } from "../addon/fold-emoji";
 import { EchartsRenderer } from "../powerpack/fold-code-with-echarts";
 import { MermaidRenderer } from "../powerpack/fold-code-with-mermaid";
 // Powerpacks
@@ -62,13 +62,13 @@ LinkEnhancer(md);
 export function enableEmoji(
   emojiDefinitions: { [key: string]: string } = EmojiDefinitions
 ) {
-  setEmojiDefaultDict(emojiDefinitions);
-  md.use(MarkdownItEmoji, { defs: emojiDefinitions });
+  setEmojiDefinitions(emojiDefinitions);
   const reverse: { [key: string]: string } = {};
   for (let shortName in emojiDefinitions) {
     reverse[emojiDefinitions[shortName]] = shortName;
   }
   setReverseEmojiDefinitions(reverse);
+  md.use(MarkdownItEmoji, { defs: emojiDefinitions });
 }
 
 interface RenderMarkdownOutput {
