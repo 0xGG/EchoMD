@@ -8,7 +8,12 @@ import MarkdownItSub from "markdown-it-sub";
 import MarkdownItSup from "markdown-it-sup";
 import MarkdownItTaskLists from "markdown-it-task-lists";
 import twemoji from "twemoji";
-import { EmojiDefinitions, getTwemojiOptions } from "../addon/emoji/index";
+import {
+  EmojiDefinitions,
+  getTwemojiOptions,
+  setEmojiDefinitions,
+  setReverseEmojiDefinitions,
+} from "../addon/emoji/index";
 import { EchartsRenderer } from "../powerpack/fold-code-with-echarts";
 import { MermaidRenderer } from "../powerpack/fold-code-with-mermaid";
 // Powerpacks
@@ -40,7 +45,6 @@ const md = new MarkdownIt({
   breaks: true,
 });
 
-md.use(MarkdownItEmoji, { defs: EmojiDefinitions });
 md.use(MarkdownItFootnote);
 md.use(MarkdownItTaskLists);
 md.use(MarkdownItMark);
@@ -54,6 +58,18 @@ FenceEnhancer(md);
 WikiLinkEnhancer(md);
 BlockReferenceEnhancer(md);
 LinkEnhancer(md);
+
+export function enableEmoji(
+  emojiDefinitions: { [key: string]: string } = EmojiDefinitions
+) {
+  setEmojiDefinitions(emojiDefinitions);
+  const reverse: { [key: string]: string } = {};
+  for (let shortName in emojiDefinitions) {
+    reverse[emojiDefinitions[shortName]] = shortName;
+  }
+  setReverseEmojiDefinitions(reverse);
+  md.use(MarkdownItEmoji, { defs: emojiDefinitions });
+}
 
 interface RenderMarkdownOutput {
   html: string;

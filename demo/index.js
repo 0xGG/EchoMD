@@ -109,6 +109,7 @@ require([
   "turndown-plugin-gfm",
 ], function (CodeMirror, HyperMD, Preview, Widget, Emoji, Theme) {
   ("use strict");
+  Preview.enableEmoji(Emoji.EmojiDefinitions);
   var myTextarea = document.getElementById("demo");
 
   // HyperMD magic. See https://laobubu.net/HyperMD/docs/

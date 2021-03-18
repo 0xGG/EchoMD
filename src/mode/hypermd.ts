@@ -6,11 +6,8 @@
 
 import * as CodeMirror from "codemirror";
 import "codemirror/mode/markdown/markdown";
-import {
-  BlocKReferenceStopRegExp,
-  EmojiRegExp,
-  HashTagRegExp,
-} from "../addon/regexp/index";
+import { ReverseEmojiDefinitions } from "../addon/emoji/index";
+import { BlocKReferenceStopRegExp, HashTagRegExp } from "../addon/regexp/index";
 import "./hypermd.css";
 
 /**
@@ -607,7 +604,7 @@ CodeMirror.defineMode(
         //#endregion
 
         //#region emoji
-        if (stream.current().match(EmojiRegExp)) {
+        if (stream.current() in ReverseEmojiDefinitions) {
           ans += ` formatting-emoji-regexpr formatting-emoji `;
         }
         //#endregion

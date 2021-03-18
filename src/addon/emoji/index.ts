@@ -1,6 +1,6 @@
-// DESCRIPTION: Emoji dict. Copied and modified from https://github.com/markdown-it/markdown-it-emoji/blob/master/lib/data/full.json and also (function (dest: typeof defaultDict) https://gist.github.com/rxaviers/7360908
+// DESCRIPTION: Emoji dict. Copied and modified from https://github.com/markdown-it/markdown-it-emoji/blob/master/lib/data/full.json
 
-export const EmojiDefinitions: { [key: string]: string } = {
+export let EmojiDefinitions: { [key: string]: string } = {
   "100": "💯",
   "1234": "🔢",
   grinning: "😀",
@@ -1841,6 +1841,10 @@ export const EmojiDefinitions: { [key: string]: string } = {
   wales: "🏴󠁧󠁢󠁷󠁬󠁳󠁿",
 };
 
+export function setEmojiDefinitions(d: { [key: string]: string }) {
+  EmojiDefinitions = d;
+}
+
 var twemojiOptions: object = {
   folder: "svg",
   ext: ".svg",
@@ -1854,4 +1858,10 @@ export function setTwemojiOptions(options?: object | Function) {
 
 export function getTwemojiOptions() {
   return twemojiOptions;
+}
+
+export let ReverseEmojiDefinitions: { [key: string]: string } = {};
+
+export function setReverseEmojiDefinitions(d: { [key: string]: string }) {
+  ReverseEmojiDefinitions = d;
 }

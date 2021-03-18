@@ -8,25 +8,24 @@ import * as CodeMirror from "codemirror";
 import { Position } from "codemirror";
 import { Addon, suggestedEditorConfig } from "../core";
 import { cm_t } from "../core/type";
-import { EmojiDefinitions } from "./emoji/index";
+import { EmojiDefinitions, ReverseEmojiDefinitions } from "./emoji/index";
 import {
   breakMark,
   FolderFunc,
   registerFolder,
   RequestRangeResult,
 } from "./fold";
-import { EmojiRegExp } from "./regexp/index";
 
 /********************************************************************************** */
 
 export type EmojiRenderer = (text: string) => HTMLElement;
 export type EmojiChecker = (text: string) => boolean;
 
-export const defaultDict: Record<string, string> = {}; /* initialized later */
-export const defaultChecker: EmojiChecker = (text) => text in defaultDict;
+export const defaultChecker: EmojiChecker = (text) =>
+  text in EmojiDefinitions || text in ReverseEmojiDefinitions;
 export const defaultRenderer: EmojiRenderer = (text) => {
   var el = document.createElement("span");
-  el.textContent = defaultDict[text];
+  el.textContent = EmojiDefinitions[text.replace(/^:(.+?):$/, "$1")] || text;
   el.title = text;
   return el;
 };
@@ -47,7 +46,7 @@ export const EmojiFolder: FolderFunc = (stream, token) => {
 
   var name = token.string; // with ":" or emoji
   var addon = getAddon(cm);
-  if (!addon.isEmoji(name)) return null;
+  if (!addon.isEmoji(name.replace(/^:(.+?):$/, "$1"))) return null;
 
   const reqAns = stream.requestRange(from, to);
   if (reqAns !== RequestRangeResult.OK) return null;
@@ -149,9 +148,7 @@ export class FoldEmoji implements Addon.Addon, Options {
   }
 
   isEmoji(text: string) {
-    return (
-      text in this.myEmoji || text.match(EmojiRegExp) || this.emojiChecker(text)
-    );
+    return text in this.myEmoji || this.emojiChecker(text);
   }
 
   foldEmoji(text: string, from: CodeMirror.Position, to: CodeMirror.Position) {
@@ -195,11 +192,3 @@ declare global {
 }
 
 /********************************************************************************** */
-
-//#region initialize compact emoji dict
-(function (dest: typeof defaultDict) {
-  for (const key in EmojiDefinitions) {
-    dest[`:${key}:`] = EmojiDefinitions[key];
-  }
-})(defaultDict);
-//#endregion
