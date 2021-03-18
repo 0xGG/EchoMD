@@ -29,17 +29,20 @@ const twemoji: typeof _twemoji_module =
 export const twemojiChecker: EmojiChecker = defaultChecker;
 
 export const twemojiRenderer: EmojiRenderer = (text) => {
-  const emojiStr = text.startsWith(":") ? defaultDict[text] : text;
+  const emojiStr = text.startsWith(":")
+    ? defaultDict[text.replace(/^:(.+?):$/, "$1")]
+    : text;
   const twemojiOptions = getTwemojiOptions();
   const html = twemojiOptions
     ? twemoji.parse(emojiStr, twemojiOptions)
     : twemoji.parse(emojiStr);
 
   // If twemoji failed to render, fallback to defaultRenderer
-  if (!/^<img /i.test(html)) return defaultRenderer(text);
+  const match = html.match(/^<(img|span) /i);
+  if (!match) return defaultRenderer(text);
 
   const attr = /([\w-]+)="(.+?)"/g;
-  const ans = document.createElement("img");
+  const ans = document.createElement(match[1] || "img");
   let t: RegExpMatchArray;
   while ((t = attr.exec(html))) ans.setAttribute(t[1], t[2]);
   return ans;

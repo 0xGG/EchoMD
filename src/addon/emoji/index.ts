@@ -1855,3 +1855,9 @@ export function setTwemojiOptions(options?: object | Function) {
 export function getTwemojiOptions() {
   return twemojiOptions;
 }
+
+export let ReverseEmojiDefinitions: { [key: string]: string } = {};
+
+export function setReverseEmojiDefinitions(d: { [key: string]: string }) {
+  ReverseEmojiDefinitions = d;
+}
